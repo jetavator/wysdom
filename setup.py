@@ -70,10 +70,13 @@ setup(
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     include_package_data=True,
-    license=license,
     classifiers=[
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7'
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "License :: OSI Approved :: Apache Software License",
+        "Operating System :: OS Independent",
+        "Intended Audience :: Developers",
+        "Topic :: Software Development :: Libraries :: Python Modules"
     ]
 )
