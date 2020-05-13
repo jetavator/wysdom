@@ -1,5 +1,6 @@
 -e .
 
+coverage
 wheel
 sphinx
 behave
