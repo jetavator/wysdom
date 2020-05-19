@@ -1,3 +1,4 @@
+from .__version__ import __version__
 from . import mixins
 from .exceptions import ValidationError
 from .dom.functions import dom, document, parent, key
