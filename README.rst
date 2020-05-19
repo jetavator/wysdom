@@ -1,10 +1,13 @@
 wysdom
 ######
 
-|Python application| |codecov|
+|Python application| |docs| |codecov|
 
 .. |Python application| image:: https://github.com/jetavator/wysdom/workflows/Python%20application/badge.svg
    :target: https://github.com/jetavator/wysdom
+
+.. |docs| image:: https://readthedocs.org/projects/wysdom/badge/?version=latest
+   :target: https://wysdom.readthedocs.io/en/latest/
 
 .. |codecov| image:: https://codecov.io/gh/jetavator/wysdom/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/jetavator/wysdom
