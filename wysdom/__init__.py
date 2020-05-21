@@ -7,4 +7,4 @@ from .dom import DOMElement as Element
 from .base_schema import Schema, SchemaAnything, SchemaConst
 from .object_schema import SchemaArray, SchemaDict
 from .user_objects import UserProperty, UserObject
-from .user_object_mixins import ReadsJSON
+from .user_object_mixins import ReadsJSON, ReadsYAML

@@ -21,7 +21,8 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'jsonschema>=3.2.0,<4'
+    'jsonschema>=3.2.0,<4',
+    'pyyaml>=5.3.1,<6'
 ]
 
 # What packages are optional?
