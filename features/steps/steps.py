@@ -4,6 +4,8 @@ from wysdom import document, parent, key, UserObject
 
 import os
 import importlib.util
+import yaml
+import json
 
 
 @given("the Python module {module}.py")
@@ -15,36 +17,31 @@ def step_impl(context, module):
             f"examples/modules/{module}.py"
         )
     )
-    context.module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(context.module)
+    loaded_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(loaded_module)
+    globals()[module] = loaded_module
 
 
 @step(u"the following string, {variable_name}")
 def step_impl(context, variable_name):
-    setattr(context, variable_name, context.text)
+    globals()[variable_name] = context.text
 
 
-@when("we evaluate the following python code in the variable example")
+@when("we execute the following python code")
 def step_impl(context):
-    context.example = eval(context.text)
+    exec(context.text)
+    globals().update(locals())
 
 
 @then("the following statements are true")
 def step_impl(context):
-    example = context.example
     assert callable(document)
     assert callable(parent)
     assert callable(key)
-    assert isinstance(example, UserObject)
     for line in context.text.splitlines():
         result = eval(line)
         if not result:
             raise Exception(f"{line} had result {result}")
-
-
-@when("we try run the following python code")
-def step_impl(context):
-    raise NotImplementedError
 
 
 @then("the following statement raises {exception_type}")

@@ -1,0 +1,13 @@
+{
+  "services": {
+    "spark": {
+      "type": "local_spark"
+    }
+  },
+  "storage": {
+    "vault": "spark",
+    "star": "spark",
+    "logs": "spark"
+  },
+  "compute": "spark"
+}
