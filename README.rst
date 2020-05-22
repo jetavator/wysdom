@@ -15,6 +15,13 @@ wysdom
 A Python library for building custom document object models (DOMs) with built-in JSON schema
 checking.
 
+Installation
+============
+
+In your system console, run::
+
+    pip install wysdom
+
 
 Motivation
 ==========
