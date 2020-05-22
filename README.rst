@@ -17,7 +17,7 @@ checking.
 
 
 Motivation
-----------
+==========
 
 A common requirement in Python projects is to be able to load serialized structured data
 into Python objects. Typically, you might begin by using dictionaries to store this data
@@ -48,7 +48,7 @@ attributes from the parent object `config`.
 
 
 What wysdom does
-----------------
+================
 
 With wysdom, you have one simple declarative way of defining the class structure of your
 data objects. You can then instantiate a data object using raw data in dict form, or directly
@@ -63,11 +63,13 @@ library to enable you to validate potential input.
 
 
 Example Usage
--------------
+=============
 
 User class definition::
 
-    from wysdom import UserObject, UserProperty, SchemaArray
+    from wysdom import (
+        UserObject, UserProperty, SchemaArray, SchemaDict, key
+    )
 
     class Address(UserObject):
         first_line = UserProperty(str)
@@ -75,11 +77,20 @@ User class definition::
         city = UserProperty(str)
         postal_code = UserProperty(int)
 
+    class Vehicle(UserObject):
+        color: str = UserProperty(str)
+        description: str = UserProperty(str)
+
+        @property
+        def license(self):
+            return key(self)
+
     class Person(UserObject):
         first_name = UserProperty(str)
         last_name = UserProperty(str)
         current_address = UserProperty(Address)
         previous_addresses = UserProperty(SchemaArray(Address))
+        vehicles = UserProperty(SchemaDict(Vehicle))
 
 Loading from dict::
 
@@ -97,7 +108,13 @@ Loading from dict::
         "second_line": "",
         "city": "Springfield",
         "postal_code": 58008
-      }]
+      }],
+      "vehicles": {
+        "eabf04": {
+          "color": "orange",
+          "description": "Station Wagon"
+        }
+      }
     })
 
 Reading attributes::
@@ -110,3 +127,9 @@ Reading attributes::
 
     >>> person_instance.previous_addresses[0].first_line
     '742 Evergreen Terrace'
+
+    >>> person_instance.vehicles["eabf04"].color
+    'orange'
+
+    >>> person_instance.vehicles["eabf04"].license
+    'eabf04'

@@ -84,6 +84,11 @@ class DOMObject(DOMElement, MutableMapping, RegistersSubclasses):
                 yield DOMInfo(value, document(self), self, key)
 
     def to_builtin(self) -> Dict[str, Any]:
+        """
+        Returns the contents of this DOM object as a Python builtin.
+
+        :return: A Python dict containing this object's data
+        """
         return {
             k: (
                 v.to_builtin()
