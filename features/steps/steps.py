@@ -1,6 +1,6 @@
 from behave import *
 
-from wysdom import document, parent, key
+from wysdom import document, parent, key, schema
 
 import os
 import importlib.util
@@ -38,6 +38,7 @@ def step_impl(context):
     assert callable(document)
     assert callable(parent)
     assert callable(key)
+    assert callable(schema)
     for line in context.text.splitlines():
         result = eval(line)
         if not result:

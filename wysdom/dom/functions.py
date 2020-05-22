@@ -1,5 +1,6 @@
 from typing import Optional
 
+from ..base_schema import Schema
 from .DOMElement import DOMElement
 from . import DOMInfo
 
@@ -18,3 +19,7 @@ def parent(element: DOMElement) -> Optional[DOMElement]:
 
 def key(element: DOMElement) -> Optional[str]:
     return dom(element).element_key
+
+
+def schema(element: DOMElement) -> Schema:
+    return element.__json_schema__()
