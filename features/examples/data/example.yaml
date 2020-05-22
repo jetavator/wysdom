@@ -1,8 +1,16 @@
-services:
-  spark:
-    type: local_spark
-storage:
-  vault: spark
-  star: spark
-  logs: spark
-compute: spark
+first_name: Marge
+last_name: Simpson
+current_address:
+  first_line: 123 Fake Street
+  second_line: ''
+  city: Springfield
+  postal_code: 58008
+previous_addresses:
+- first_line: 742 Evergreen Terrace
+  second_line: ''
+  city: Springfield
+  postal_code: 58008
+vehicles:
+  eabf04:
+    color: orange
+    description: Station Wagon

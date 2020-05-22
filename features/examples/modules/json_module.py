@@ -1,41 +1,27 @@
-from typing import Dict
+from typing import Dict, List
 
-import wysdom
-
-
-class ServiceExample(wysdom.UserObject):
-
-    type: str = wysdom.UserProperty(str)
-
-    def name(self) -> str:
-        return wysdom.key(self)
+from wysdom import UserObject, UserProperty, SchemaArray, SchemaDict, ReadsJSON, key
 
 
-class DBServiceExample(ServiceExample):
+class Vehicle(UserObject):
+    color: str = UserProperty(str)
+    description: str = UserProperty(str)
 
-    type: str = wysdom.UserProperty(str)
-
-
-class LocalSparkExample(DBServiceExample):
-
-    type: str = wysdom.UserProperty(wysdom.SchemaConst('local_spark'))
-
-
-class StorageExample(wysdom.UserObject):
-
-    source: str = wysdom.UserProperty(str)
-    vault: str = wysdom.UserProperty(str)
-    star: str = wysdom.UserProperty(str)
-    logs: str = wysdom.UserProperty(str)
+    @property
+    def license(self):
+        return key(self)
 
 
-class Example(wysdom.UserObject, wysdom.ReadsJSON):
+class Address(UserObject):
+    first_line: str = UserProperty(str)
+    second_line: str = UserProperty(str)
+    city: str = UserProperty(str)
+    postal_code: str = UserProperty(int)
 
-    prefix: str = wysdom.UserProperty(str, default="jetavator")
-    drop_schema_if_exists: bool = wysdom.UserProperty(bool, default=False)
-    skip_deploy: bool = wysdom.UserProperty(bool, default=False)
-    environment_type: str = wysdom.UserProperty(str, default="local_spark")
-    services: Dict[str, ServiceExample] = wysdom.UserProperty(
-        wysdom.SchemaDict(ServiceExample), default={})
-    storage: StorageExample = wysdom.UserProperty(StorageExample)
-    compute: str = wysdom.UserProperty(str)
+
+class Person(UserObject, ReadsJSON):
+    first_name: str = UserProperty(str)
+    last_name: str = UserProperty(str)
+    current_address: Address = UserProperty(Address)
+    previous_addresses: List[Address] = UserProperty(SchemaArray(Address))
+    vehicles: Dict[str, Vehicle] = UserProperty(SchemaDict(Vehicle))
