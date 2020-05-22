@@ -28,9 +28,9 @@ class SchemaArray(Schema):
         )
 
     @property
-    def schema(self) -> Dict[str, Any]:
+    def jsonschema_dict(self) -> Dict[str, Any]:
         return {
             "array": {
-                "items": self.items
+                "items": self.items.jsonschema_dict
             }
         }

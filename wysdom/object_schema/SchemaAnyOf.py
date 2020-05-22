@@ -36,10 +36,10 @@ class SchemaAnyOf(Schema):
         return valid_schemas[0](value, dom_info)
 
     @property
-    def schema(self) -> Dict[str, Any]:
+    def jsonschema_dict(self) -> Dict[str, Any]:
         return {
             'anyOf': [
-                allowed_schema.schema
+                allowed_schema.jsonschema_dict
                 for allowed_schema in self.allowed_schemas
             ]
         }

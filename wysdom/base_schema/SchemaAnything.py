@@ -13,5 +13,5 @@ class SchemaAnything(Schema):
         return value
 
     @property
-    def schema(self) -> Dict[str, Any]:
+    def jsonschema_dict(self) -> Dict[str, Any]:
         return {}
