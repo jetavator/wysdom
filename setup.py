@@ -67,6 +67,9 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
+    project_urls={
+        "Documentation": "https://wysdom.readthedocs.io/en/latest/"
+    },
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=REQUIRED,
     extras_require=EXTRAS,
