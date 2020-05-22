@@ -104,6 +104,13 @@ class DOMObject(DOMElement, MutableMapping, RegistersSubclasses):
 
     def __deepcopy__(self, memo: Dict[int, DOMElement]) -> DOMObject:
         cls = self.__class__
-        result = cls(deepcopy(dict(self), memo))
+        # noinspection PyArgumentList
+        result = cls(
+            value={
+                k: deepcopy(v, memo)
+                for k, v in self.items()
+            },
+            json_dom_info=self.__json_dom_info__
+        )
         memo[id(self)] = result
         return result

@@ -6,6 +6,7 @@ import os
 import importlib.util
 import yaml
 import json
+import copy
 
 
 @given("the Python module {module}.py")

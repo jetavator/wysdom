@@ -109,6 +109,8 @@ Feature: Test JSON DOM objects
       schema(example).is_valid(example_dict_input)
       schema(example).jsonschema_dict == expected_schema
       example_dict_output == example_dict_input
+      copy.copy(example).to_builtin() == example_dict_input
+      copy.deepcopy(example).to_builtin() == example_dict_input
       """
 
   Scenario: Test bad input string
