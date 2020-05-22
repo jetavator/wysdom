@@ -1,10 +1,13 @@
 from __future__ import annotations
 
-from typing import Generic, TypeVar, Optional, Any
+from typing import Generic, TypeVar, Optional, Any, Dict
 
 from collections.abc import Mapping
 
+from copy import deepcopy
+
 from ..base_schema import Schema, SchemaAnything
+from .DOMElement import DOMElement
 from .DOMObject import DOMObject
 from . import DOMInfo
 from .DOMProperties import DOMProperties
@@ -32,3 +35,17 @@ class DOMDict(DOMObject, Generic[T_co]):
 
     def __getitem__(self, key: str) -> T_co:
         return super().__getitem__(key)
+
+    def __deepcopy__(self, memo: Dict[int, DOMElement]) -> DOMDict:
+        cls = self.__class__
+        # noinspection PyArgumentList
+        result = cls(
+            value={
+                k: deepcopy(v, memo)
+                for k, v in self.items()
+            },
+            json_dom_info=self.__json_dom_info__,
+            _item_type=self.__json_schema_properties__.additional_properties
+        )
+        memo[id(self)] = result
+        return result

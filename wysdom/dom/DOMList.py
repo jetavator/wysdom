@@ -121,6 +121,11 @@ class DOMList(DOMElement, MutableSequence, Generic[T_co]):
 
     def __deepcopy__(self, memo: Dict[int, DOMElement]) -> DOMList:
         cls = self.__class__
-        result = cls(deepcopy(list(self), memo))
+        # noinspection PyArgumentList
+        result = cls(
+            value=(deepcopy(x, memo) for x in self),
+            json_dom_info=self.__json_dom_info__,
+            _item_type=self.item_type
+        )
         memo[id(self)] = result
         return result
