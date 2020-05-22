@@ -6,41 +6,65 @@ Feature: Test JSON DOM objects
     And the following string, example_json_input
       """
       {
-        "services": {
-          "spark": {
-            "type": "local_spark"
+        "first_name": "Marge",
+        "last_name": "Simpson",
+        "current_address": {
+          "first_line": "123 Fake Street",
+          "second_line": "",
+          "city": "Springfield",
+          "postal_code": 58008
+        },
+        "previous_addresses": [{
+          "first_line": "742 Evergreen Terrace",
+          "second_line": "",
+          "city": "Springfield",
+          "postal_code": 58008
+        }],
+        "vehicles": {
+          "eabf04": {
+            "color": "orange",
+            "description": "Station Wagon"
           }
-        },
-        "storage": {
-          "vault": "spark",
-          "star": "spark",
-          "logs": "spark"
-        },
-        "compute": "spark"
+        }
       }
       """
     When we execute the following python code:
       """
-      example = json_module.Example.from_json(example_json_input)
+      example = json_module.Person.from_json(example_json_input)
       example_json_output = example.to_json()
       """
     Then the following statements are true:
       """
-      example.storage.vault == "spark"
-      example.storage["vault"] == "spark"
-      example.services["spark"].type == "local_spark"
-      example["services"]["spark"]["type"] == "local_spark"
-      len(example) == 3
-      len(example.storage) == 3
-      parent(example.services) is example
-      document(example.services) is example
-      key(example.services) == "services"
-      parent(example.services["spark"]) is example.services
-      document(example.services["spark"]) is example
-      key(example.services["spark"]) == "spark"
-      parent(example["services"]["spark"]) is example.services
-      document(example["services"]["spark"]) is example
-      key(example["services"]["spark"]) == "spark"
+      example.first_name == "Marge"
+      example.last_name == "Simpson"
+      example.current_address.first_line == "123 Fake Street"
+      example.current_address.second_line == ""
+      example.current_address.city == "Springfield"
+      example.current_address.postal_code == 58008
+      example["current_address"].first_line == "123 Fake Street"
+      example["current_address"].second_line == ""
+      example["current_address"].city == "Springfield"
+      example["current_address"].postal_code == 58008
+      example.previous_addresses[0].first_line == "742 Evergreen Terrace"
+      example.previous_addresses[0].second_line == ""
+      example.previous_addresses[0].city == "Springfield"
+      example.previous_addresses[0].postal_code == 58008
+      example.vehicles["eabf04"].color == "orange"
+      example.vehicles["eabf04"].description == "Station Wagon"
+      example.vehicles["eabf04"].license == "eabf04"
+      len(example) == 5
+      len(example.current_address) == 4
+      len(example.previous_addresses) == 1
+      len(example.vehicles) == 1
+      parent(example.current_address) is example
+      document(example.current_address) is example
+      key(example.current_address) == "current_address"
+      parent(example.vehicles["eabf04"]) is example.vehicles
+      document(example.vehicles["eabf04"]) is example
+      key(example.vehicles["eabf04"]) == "eabf04"
+      parent(example["vehicles"]["eabf04"]) is example.vehicles
+      document(example["vehicles"]["eabf04"]) is example
+      key(example["vehicles"]["eabf04"]) == "eabf04"
       json.JSONDecoder().decode(example_json_output) == json.JSONDecoder().decode(example_json_input)
       """
 
@@ -49,26 +73,41 @@ Feature: Test JSON DOM objects
     Given the Python module json_module.py
     When we execute the following python code:
       """
-      example = json_module.Example.from_json_file("./features/examples/data/example.json")
+      example = json_module.Person.from_json_file("./features/examples/data/example.json")
       example_json_output = example.to_json()
       """
     Then the following statements are true:
       """
-      example.storage.vault == "spark"
-      example.storage["vault"] == "spark"
-      example.services["spark"].type == "local_spark"
-      example["services"]["spark"]["type"] == "local_spark"
-      len(example) == 3
-      len(example.storage) == 3
-      parent(example.services) is example
-      document(example.services) is example
-      key(example.services) == "services"
-      parent(example.services["spark"]) is example.services
-      document(example.services["spark"]) is example
-      key(example.services["spark"]) == "spark"
-      parent(example["services"]["spark"]) is example.services
-      document(example["services"]["spark"]) is example
-      key(example["services"]["spark"]) == "spark"
+      example.first_name == "Marge"
+      example.last_name == "Simpson"
+      example.current_address.first_line == "123 Fake Street"
+      example.current_address.second_line == ""
+      example.current_address.city == "Springfield"
+      example.current_address.postal_code == 58008
+      example["current_address"].first_line == "123 Fake Street"
+      example["current_address"].second_line == ""
+      example["current_address"].city == "Springfield"
+      example["current_address"].postal_code == 58008
+      example.previous_addresses[0].first_line == "742 Evergreen Terrace"
+      example.previous_addresses[0].second_line == ""
+      example.previous_addresses[0].city == "Springfield"
+      example.previous_addresses[0].postal_code == 58008
+      example.vehicles["eabf04"].color == "orange"
+      example.vehicles["eabf04"].description == "Station Wagon"
+      example.vehicles["eabf04"].license == "eabf04"
+      len(example) == 5
+      len(example.current_address) == 4
+      len(example.previous_addresses) == 1
+      len(example.vehicles) == 1
+      parent(example.current_address) is example
+      document(example.current_address) is example
+      key(example.current_address) == "current_address"
+      parent(example.vehicles["eabf04"]) is example.vehicles
+      document(example.vehicles["eabf04"]) is example
+      key(example.vehicles["eabf04"]) == "eabf04"
+      parent(example["vehicles"]["eabf04"]) is example.vehicles
+      document(example["vehicles"]["eabf04"]) is example
+      key(example["vehicles"]["eabf04"]) == "eabf04"
       """
 
   Scenario: Test bad input string
@@ -80,5 +119,5 @@ Feature: Test JSON DOM objects
       """
     Then the following statement raises ValidationError
       """
-      json_module.Example.from_json(example_json_input)
+      json_module.Person.from_json(example_json_input)
       """

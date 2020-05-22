@@ -1,6 +1,6 @@
 from behave import *
 
-from wysdom import document, parent, key, UserObject
+from wysdom import document, parent, key
 
 import os
 import importlib.util

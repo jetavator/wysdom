@@ -45,20 +45,6 @@ class UserObject(DOMObject):
     """
     Base class for user-defined DOM objects.
 
-    Example usage:
-
-    class Address(UserObject):
-        first_line = UserProperty(str)
-        second_line = UserProperty(str)
-        city = UserProperty(str)
-        postal_code = UserProperty(int)
-
-    class Person(UserObject):
-        first_name = UserProperty(str)
-        last_name = UserProperty(str)
-        current_address = UserProperty(Address)
-        previous_addresses = UserProperty(JSONSchemaList(Address))
-
     :param value:         A dict-like object to populate the underlying data
                           object's keys. May be provided alone or in conjunction
                           with keyword arguments.
