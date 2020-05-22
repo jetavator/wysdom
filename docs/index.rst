@@ -95,6 +95,23 @@ properties, you may use the `default_function` parameter::
             default_function=lambda person: person.first_name
         )
 
+DOM functions
+=============
+
+While the DOM and schema information can be retrieved from a DOMElement
+using the `__json_dom_info__` property and `__json_schema__()` method
+respectively, the following convenience functions are provided
+for code readability.
+
+.. autofunction:: wysdom.document
+
+.. autofunction:: wysdom.parent
+
+.. autofunction:: wysdom.key
+
+.. autofunction:: wysdom.schema
+
+
 Mixins
 ======
 
