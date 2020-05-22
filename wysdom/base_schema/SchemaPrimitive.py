@@ -24,7 +24,7 @@ class SchemaPrimitive(SchemaType):
             value: Any,
             dom_info: Tuple = None
     ) -> Any:
-        return self.python_type(value)
+        return super().__call__(self.python_type(value))
 
     @property
     def type_name(self) -> str:

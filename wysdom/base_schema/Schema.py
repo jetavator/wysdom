@@ -15,7 +15,6 @@ class Schema(ABC):
     primitive Python object containing the data that is supplied to them.
     """
 
-    @abstractmethod
     def __call__(
             self,
             value: Any,
@@ -25,7 +24,9 @@ class Schema(ABC):
         Return either a DOM object or primitive Python object containing the data
         supplied in `value`, if `value` is a valid instance of this schema.
 
-        :return: A DOM object or primitive Python object containing the data in `value`
+        :param value:    The raw value for which to create an object
+        :param dom_info: An optional tuple containing DOM information for the object, if relevant
+        :return:         A DOM object or primitive Python object containing the data in `value`
         """
         if self.is_valid(value):
             return value
@@ -42,7 +43,7 @@ class Schema(ABC):
 
         :return: A jsonschema-compatible dictionary
         """
-        return {}
+        pass
 
     def is_valid(self, value: Any) -> bool:
         """

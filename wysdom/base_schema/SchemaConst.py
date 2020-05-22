@@ -13,15 +13,6 @@ class SchemaConst(Schema):
     ) -> None:
         self.value = value
 
-    def __call__(
-            self,
-            value: str,
-            dom_info: Tuple = None
-    ) -> Any:
-        if value != self.value:
-            raise ValueError(f"Value can only be '{self.value}'.")
-        return self.value
-
     @property
     def jsonschema_dict(self) -> Dict[str, Any]:
         return {
