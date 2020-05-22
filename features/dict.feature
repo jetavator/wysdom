@@ -29,6 +29,50 @@ Feature: Test JSON DOM objects
       }
       example = dict_module.Person(example_dict_input)
       example_dict_output = example.to_builtin()
+      expected_schema = {
+        "additionalProperties": False,
+        "properties": {
+          "first_name": {"type": "string"},
+          "last_name": {"type": "string"},
+          "current_address": {
+            "additionalProperties": False,
+            "properties": {
+              "city": {"type": "string"},
+              "first_line": {"type": "string"},
+              "postal_code": {"type": "integer"},
+              "second_line": {"type": "string"}
+            },
+            "type": "object"
+          },
+          "previous_addresses": {
+            "array": {
+              "items": {
+                "additionalProperties": False,
+                "properties": {
+                  "city": {"type": "string"},
+                  "first_line": {"type": "string"},
+                  "postal_code": {"type": "integer"},
+                  "second_line": {"type": "string"}
+                },
+                "type": "object"
+               }
+            }
+          },
+          "vehicles": {
+            "properties": {},
+            "additionalProperties": {
+              "properties": {
+                "color": {"type": "string"},
+                "description": {"type": "string"}
+              },
+              "additionalProperties": False,
+              "type": "object"
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
       """
     Then the following statements are true:
       """
@@ -63,6 +107,7 @@ Feature: Test JSON DOM objects
       document(example["vehicles"]["eabf04"]) is example
       key(example["vehicles"]["eabf04"]) == "eabf04"
       schema(example).is_valid(example_dict_input)
+      schema(example).jsonschema_dict == expected_schema
       example_dict_output == example_dict_input
       """
 

@@ -198,6 +198,49 @@ bases of Person::
 .. autoclass:: wysdom.ReadsYAML
    :members:
 
+
+Internals
+=========
+
+Schema objects
+--------------
+
+.. autoclass:: wysdom.Schema
+   :members:
+
+Base schemas
+............
+
+The following schemas define simple atomic schemas
+(defined in the subpackage `wysdom.base_schema`):
+
+===============  ==================================================================
+Name             Description
+===============  ==================================================================
+Schema           abstract base class
+SchemaType       abstract base class for any schema with the "type" directive
+SchemaAnything   any valid JSON will be accepted
+SchemaConst      a string constant
+SchemaNone       a null value
+SchemaPrimitive  a primitive variable
+===============  ==================================================================
+
+Object schemas
+..............
+
+The following schemas define complex schemas which reference other schemas
+(defined in the subpackage `wysdom.object_schema`):
+
+===============  ==================================================================
+Name             Description
+===============  ==================================================================
+SchemaAnyOf      Any of the permitted schemas supplied
+SchemaArray      An array (corresponding to a Python list)
+SchemaObject     An object with named properties
+SchemaDict       An object with dynamic properties (corresponding to a Python dict)
+===============  ==================================================================
+
+
 Indices and tables
 ==================
 

@@ -29,15 +29,15 @@ class SchemaObject(SchemaType):
         return self.object_type(value, dom_info)
 
     @property
-    def schema(self) -> Dict[str, Any]:
+    def jsonschema_dict(self) -> Dict[str, Any]:
         return {
-            **super().schema,
+            **super().jsonschema_dict,
             'properties': {
-                k: v.schema
+                k: v.jsonschema_dict
                 for k, v in self.properties.items()
             },
             "additionalProperties": (
-                self.additional_properties.schema
+                self.additional_properties.jsonschema_dict
                 if isinstance(self.additional_properties, Schema)
                 else self.additional_properties
             )
