@@ -1,4 +1,4 @@
-from typing import Any, Dict, Tuple, Iterable
+from typing import Any, Dict, Tuple, Iterable, Optional
 
 from ..dom import DOMInfo
 from ..exceptions import ValidationError
@@ -6,13 +6,17 @@ from ..base_schema import Schema
 
 
 class SchemaAnyOf(Schema):
+
     allowed_schemas: Tuple[Schema] = None
+    schema_ref_name: Optional[str] = None
 
     def __init__(
             self,
-            allowed_schemas: Iterable[Schema]
+            allowed_schemas: Iterable[Schema],
+            schema_ref_name: Optional[str] = None
     ) -> None:
         self.allowed_schemas = tuple(allowed_schemas)
+        self.schema_ref_name = schema_ref_name
 
     def __call__(
             self,
@@ -31,15 +35,24 @@ class SchemaAnyOf(Schema):
             )
         if len(valid_schemas) == 0:
             raise ValidationError(
-                "No valid schema was found for the supplied value"
+                f"No valid schema was found for the supplied value: {value}"
             )
         return valid_schemas[0](value, dom_info)
 
     @property
-    def jsonschema_dict(self) -> Dict[str, Any]:
+    def referenced_schemas(self) -> Dict[str, Schema]:
+        referenced_schemas = {}
+        for allowed_schema in self.allowed_schemas:
+            referenced_schemas.update(allowed_schema.referenced_schemas)
+        if isinstance(self.schema_ref_name, str):
+            referenced_schemas[self.schema_ref_name] = self
+        return referenced_schemas
+
+    @property
+    def jsonschema_definition(self) -> Dict[str, Any]:
         return {
             'anyOf': [
-                allowed_schema.jsonschema_dict
+                allowed_schema.jsonschema_ref_schema
                 for allowed_schema in self.allowed_schemas
             ]
         }

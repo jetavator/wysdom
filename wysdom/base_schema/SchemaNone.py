@@ -1,5 +1,3 @@
-from typing import Any, Tuple
-
 from .SchemaType import SchemaType
 
 

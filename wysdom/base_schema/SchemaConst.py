@@ -1,4 +1,4 @@
-from typing import Any, Dict, Tuple
+from typing import Any, Dict
 
 from .Schema import Schema
 
@@ -14,7 +14,7 @@ class SchemaConst(Schema):
         self.value = value
 
     @property
-    def jsonschema_dict(self) -> Dict[str, Any]:
+    def jsonschema_definition(self) -> Dict[str, Any]:
         return {
             "const": self.value
         }

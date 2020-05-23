@@ -4,6 +4,7 @@ from typing import Any, Type, Iterator, Union, Mapping
 
 import inspect
 
+from ..mixins import RegistersSubclasses
 from ..base_schema import Schema
 from ..object_schema import SchemaObject, SchemaAnyOf
 from ..dom import (
@@ -89,15 +90,24 @@ class UserObject(DOMObject):
 
     @classmethod
     def __json_schema__(cls) -> Schema:
-        if cls.registered_subclasses():
+        has_subclasses = False
+        if issubclass(cls, RegistersSubclasses):
+            if cls.registered_subclasses():
+                has_subclasses = True
+        if has_subclasses:
             return SchemaAnyOf(
-                subclass.__json_schema__()
-                for subclass in cls.registered_subclasses().values()
-                if issubclass(subclass, UserObject)
+                (
+                    subclass.__json_schema__()
+                    for subclass in cls.registered_subclasses().values()
+                    if issubclass(subclass, UserObject)
+                    and not isinstance(subclass.__json_schema__(), SchemaAnyOf)
+                ),
+                schema_ref_name=f"{cls.__module__}.{cls.__name__}"
             )
         else:
             return SchemaObject(
                 properties=cls.__json_schema_properties__.properties,
                 additional_properties=cls.__json_schema_properties__.additional_properties,
-                object_type=cls
+                object_type=cls,
+                schema_ref_name=f"{cls.__module__}.{cls.__name__}"
             )

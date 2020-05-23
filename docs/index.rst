@@ -199,6 +199,87 @@ bases of Person::
    :members:
 
 
+RegistersSubclasses
+-------------------
+
+Use `RegistersSubclasses` as a mixin if you want an abstract base class to
+have several more specific subclasses::
+
+    class Pet(UserObject, RegistersSubclasses, ABC):
+        pet_type: str = UserProperty(str)
+        name: str = UserProperty(str)
+
+        @abstractmethod
+        def speak(self):
+            pass
+
+
+    class Dog(Pet):
+        pet_type: str = UserProperty(SchemaConst("dog"))
+
+        def speak(self):
+            return f"{self.name} says Woof!"
+
+
+    class Cat(Pet):
+        pet_type: str = UserProperty(SchemaConst("cat"))
+
+        def speak(self):
+            return f"{self.name} says Miaow!"
+
+
+If you use RegistersSubclasses, you may refer to the abstract
+base class when defining properties and schemas in wysdom. When
+the DOM is populated with data, the subclass which matches the
+supplied data's schema will automatically be chosen::
+
+    class Person(UserObject):
+        pets = UserProperty(SchemaArray(Pet))
+
+
+    person_instance = Person({
+        "pets": [{
+            "pet_type": "dog",
+            "name": "Santa's Little Helper"
+        }]
+    })
+
+>>> type(person_instance.pets[0])
+<class '__main__.Dog'>
+
+
+If you include an abstract base class in an object definition, it will
+be represented in the JSON schema using the `SchemaAnyOf` with all of
+the defined subclasses as allowed options.
+
+
+Registering classes by name
+...........................
+
+If your application needs to look up registered subclasses by a key,
+you may supply the register_as keyword when declaring a subclass::
+
+    class Elephant(Pet, register_as="elephant"):
+        pet_type: str = UserProperty(SchemaConst("elephant"))
+
+        def speak(self):
+            return f"{self.name} says Trumpet!"
+
+You may then use the class's registered name to look up the class or
+create an instance from its parent class::
+
+    >>> Pet.registered_subclass("elephant")
+    <class '__main__.Elephant'>
+
+    >>> Pet.registered_subclass_instance("elephant",
+    ...     {"pet_type": "elephant", "name": "Stampy"}).speak()
+    'Stampy says Trumpet!'
+
+
+.. autoclass:: wysdom.RegistersSubclasses
+   :members:
+
+
 Internals
 =========
 

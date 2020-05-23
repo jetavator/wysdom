@@ -1,4 +1,4 @@
-Feature: Test JSON DOM objects
+Feature: Test dictionary DOM objects
 
   Scenario: Test good input string
 
@@ -30,48 +30,47 @@ Feature: Test JSON DOM objects
       example = dict_module.Person(example_dict_input)
       example_dict_output = example.to_builtin()
       expected_schema = {
-        "additionalProperties": False,
-        "properties": {
-          "first_name": {"type": "string"},
-          "last_name": {"type": "string"},
-          "current_address": {
-            "additionalProperties": False,
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "$ref": "#/definitions/dict_module.Person",
+        "definitions": {
+          "dict_module.Address": {
+            "type": "object",
             "properties": {
               "city": {"type": "string"},
               "first_line": {"type": "string"},
               "postal_code": {"type": "integer"},
               "second_line": {"type": "string"}
             },
-            "type": "object"
+            "additionalProperties": False
           },
-          "previous_addresses": {
-            "array": {
-              "items": {
-                "additionalProperties": False,
-                "properties": {
-                  "city": {"type": "string"},
-                  "first_line": {"type": "string"},
-                  "postal_code": {"type": "integer"},
-                  "second_line": {"type": "string"}
-                },
-                "type": "object"
-               }
-            }
-          },
-          "vehicles": {
-            "properties": {},
-            "additionalProperties": {
-              "properties": {
-                "color": {"type": "string"},
-                "description": {"type": "string"}
-              },
-              "additionalProperties": False,
-              "type": "object"
+          "dict_module.Vehicle": {
+            "type": "object",
+            "properties": {
+              "color": {"type": "string"},
+              "description": {"type": "string"}
             },
-            "type": "object"
+            "additionalProperties": False
+          },
+          "dict_module.Person": {
+            "type": "object",
+            "properties": {
+              "first_name": {"type": "string"},
+              "last_name": {"type": "string"},
+              "current_address": {"$ref": "#/definitions/dict_module.Address"},
+              "previous_addresses": {
+              "array": {
+                "items": {"$ref": "#/definitions/dict_module.Address"}
+              }
+              },
+              "vehicles": {
+                "properties": {},
+                "additionalProperties": {"$ref": "#/definitions/dict_module.Vehicle"},
+                "type": "object"
+              }
+            },
+            "additionalProperties": False
           }
-        },
-        "type": "object"
+        }
       }
       """
     Then the following statements are true:
@@ -107,7 +106,7 @@ Feature: Test JSON DOM objects
       document(example["vehicles"]["eabf04"]) is example
       key(example["vehicles"]["eabf04"]) == "eabf04"
       schema(example).is_valid(example_dict_input)
-      schema(example).jsonschema_dict == expected_schema
+      schema(example).jsonschema_full_schema == expected_schema
       example_dict_output == example_dict_input
       copy.copy(example).to_builtin() == example_dict_input
       copy.deepcopy(example).to_builtin() == example_dict_input
