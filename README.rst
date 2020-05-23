@@ -23,6 +23,13 @@ In your system console, run::
     pip install wysdom
 
 
+Documentation
+=============
+
+| API documentation and examples can be found at:
+| https://wysdom.readthedocs.io
+
+
 Motivation
 ==========
 
