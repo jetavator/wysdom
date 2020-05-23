@@ -59,7 +59,7 @@ class RegistersSubclasses(ABC):
             )
 
     @classmethod
-    def registered_subclasses(cls) -> Dict[str, RegisteredSubclass]:
+    def registered_subclasses(cls) -> Dict[str, Type[RegistersSubclasses]]:
         """
         Return all of the registered subclasses in this class's namespace.
 
@@ -86,7 +86,7 @@ class RegistersSubclasses(ABC):
         return cls._get_class_namespace(cls) == cls.registration_namespace()
 
     @classmethod
-    def registered_subclass(cls, name: str) -> RegisteredSubclass:
+    def registered_subclass(cls, name: str) -> Type[RegistersSubclasses]:
         """
         Return a registered subclass by name.
 
@@ -130,5 +130,3 @@ class RegistersSubclasses(ABC):
     def _get_class_namespace(cls: type) -> str:
         return f"{cls.__module__}.{cls.__name__}"
 
-
-RegisteredSubclass = Type[RegistersSubclasses]

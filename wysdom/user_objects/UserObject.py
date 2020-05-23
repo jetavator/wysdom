@@ -70,7 +70,6 @@ class UserObject(DOMObject):
             **kwargs: Any
     ) -> None:
         cls.__json_schema_properties__ = UserProperties(cls)
-        super().__init_subclass__(*args, **kwargs)
 
     def __init__(
             self,

@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from typing import Any, Iterator, Dict
+from typing import Any, Iterator, Dict, Type
 
 from collections.abc import Mapping, MutableMapping
 
 from copy import deepcopy
-
-from wysdom.mixins import RegistersSubclasses
 
 from ..exceptions import ValidationError
 from ..base_schema import SchemaAnything
@@ -17,7 +15,7 @@ from .DOMProperties import DOMProperties
 from .functions import document
 
 
-class DOMObject(DOMElement, MutableMapping, RegistersSubclasses):
+class DOMObject(DOMElement, MutableMapping):
 
     __json_schema_properties__: DOMProperties = None
     __json_element_data__: Dict[str, DOMElement] = None
@@ -75,6 +73,15 @@ class DOMObject(DOMElement, MutableMapping, RegistersSubclasses):
 
     def __str__(self):
         return str(self.__json_element_data__)
+
+    @classmethod
+    def registered_subclasses(cls) -> Dict[str, Type[DOMObject]]:
+        """
+        Return all of the registered subclasses in this class's namespace.
+
+        :return: A dictionary of subclasses, indexed by registered name.
+        """
+        return {}
 
     def walk_elements(self) -> Iterator[DOMInfo]:
         for key, value in self.items():
