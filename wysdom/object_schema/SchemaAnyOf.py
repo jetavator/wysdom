@@ -6,6 +6,14 @@ from ..base_schema import Schema
 
 
 class SchemaAnyOf(Schema):
+    """
+    A schema requiring a match with any of the permitted schemas supplied.
+
+    :param allowed_schemas: A list (or other Iterable) containing the permitted
+                            `Schema` objects.
+    :param schema_ref_name: An optional unique reference name to use when this schema
+                            is referred to by other schemas.
+    """
 
     allowed_schemas: Tuple[Schema] = None
     schema_ref_name: Optional[str] = None

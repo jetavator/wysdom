@@ -6,6 +6,20 @@ from ..base_schema import Schema
 
 
 class SchemaObject(SchemaType):
+    """
+    A schema specifying an object with named properties.
+
+    :param properties:            A dictionary of `Schema` object defining the expected
+                                  names and types of this object's properties.
+    :param additional_properties: Defines whether this object permits additional
+                                  dynamically-named properties. Can be True or False, or
+                                  can be set to a specific `Schema` to restrict the permitted
+                                  types of any additional properties.
+    :param object_type:           A custom object type to use when creating object instances
+                                  from this schema.
+    :param schema_ref_name:       An optional unique reference name to use when this schema
+                                  is referred to by other schemas.
+    """
 
     type_name: str = "object"
     properties: Optional[Dict[str, Schema]] = None

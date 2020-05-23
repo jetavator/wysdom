@@ -7,6 +7,15 @@ from .resolve_arg_to_type import resolve_arg_to_schema
 
 
 class SchemaArray(Schema):
+    """
+    A schema specifying an array(corresponding to a Python list)
+
+    :param items: The permitted data type or schema for the items of this array. Must
+                  be one of:
+                  A primitive Python type (str, int, bool, float)
+                  A subclass of `UserObject`
+                  An instance of `Schema`
+    """
 
     items: Schema = None
 

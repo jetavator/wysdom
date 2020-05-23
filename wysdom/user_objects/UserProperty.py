@@ -15,7 +15,7 @@ class UserProperty(object):
                              be one of:
                              A primitive Python type (str, int, bool, float)
                              A subclass of `UserObject`
-                             An instance of `JSONSchema`
+                             An instance of `Schema`
 
     :param name:             The name of this property in the underlying
                              data object. If not provided, this defaults to
@@ -55,7 +55,7 @@ class UserProperty(object):
     ) -> Any:
         if instance is None:
             raise AttributeError(
-                "JSONSchemaProperty is not valid as a class descriptor")
+                "UserProperty is not valid as a class data descriptor")
         if self.name not in instance:
             if self.default_function:
                 instance[self.name] = self.default_function(instance)

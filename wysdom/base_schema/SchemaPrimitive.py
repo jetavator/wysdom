@@ -4,6 +4,12 @@ from .SchemaType import SchemaType
 
 
 class SchemaPrimitive(SchemaType):
+    """
+    A schema requiring a primitive variable type
+
+    :param python_type: The primitive Python type expected by this schema
+    """
+
     JSON_TYPES: Dict[Type, str] = {
         str: 'string',
         bool: 'boolean',

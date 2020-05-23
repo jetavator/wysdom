@@ -4,6 +4,9 @@ from .Schema import Schema
 
 
 class SchemaConst(Schema):
+    """
+    A schema requiring a string constant.
+    """
 
     value: str = None
 
