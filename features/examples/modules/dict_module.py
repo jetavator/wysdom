@@ -3,7 +3,7 @@ from typing import Dict, List
 from wysdom import UserObject, UserProperty, SchemaArray, SchemaDict, key
 
 
-class Vehicle(UserObject, register_as="vehicle"):
+class Vehicle(UserObject):
     color: str = UserProperty(str)
     description: str = UserProperty(str)
 
@@ -12,14 +12,14 @@ class Vehicle(UserObject, register_as="vehicle"):
         return key(self)
 
 
-class Address(UserObject, register_as="address"):
+class Address(UserObject):
     first_line: str = UserProperty(str)
     second_line: str = UserProperty(str)
     city: str = UserProperty(str)
     postal_code: str = UserProperty(int)
 
 
-class Person(UserObject, register_as="person"):
+class Person(UserObject):
     first_name: str = UserProperty(str)
     last_name: str = UserProperty(str)
     current_address: Address = UserProperty(Address)

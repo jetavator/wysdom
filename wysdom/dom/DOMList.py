@@ -9,8 +9,6 @@ from typing import (
     Dict, List, Iterator, overload
 )
 
-from copy import deepcopy
-
 from ..base_schema import Schema
 from ..exceptions import ValidationError
 
@@ -121,9 +119,8 @@ class DOMList(DOMElement, MutableSequence, Generic[T_co]):
 
     def __deepcopy__(self, memo: Dict[int, DOMElement]) -> DOMList:
         cls = self.__class__
-        # noinspection PyArgumentList
         result = cls(
-            value=(deepcopy(x, memo) for x in self),
+            value=self.to_builtin(),
             json_dom_info=self.__json_dom_info__,
             _item_type=self.item_type
         )

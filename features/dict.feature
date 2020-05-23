@@ -1,4 +1,4 @@
-Feature: Test JSON DOM objects
+Feature: Test dictionary DOM objects
 
   Scenario: Test good input string
 

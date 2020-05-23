@@ -1,6 +1,6 @@
 from typing import Optional, Dict, Type, Any, Union
 
-from ..dom import DOMInfo, DOMObject
+from ..dom import DOMInfo
 from ..base_schema import SchemaType
 from ..base_schema import Schema
 
@@ -10,16 +10,19 @@ class SchemaObject(SchemaType):
     type_name: str = "object"
     properties: Optional[Dict[str, Schema]] = None
     additional_properties: Union[bool, Schema] = False
+    schema_ref_name: Optional[str] = None
 
     def __init__(
             self,
             properties: Optional[Dict[str, Schema]] = None,
             additional_properties: Union[bool, Schema] = False,
-            object_type: Type = dict
+            object_type: Type = dict,
+            schema_ref_name: Optional[str] = None
     ) -> None:
         self.properties = properties or {}
         self.additional_properties = additional_properties
         self.object_type = object_type
+        self.schema_ref_name = schema_ref_name
 
     def __call__(
             self,
@@ -27,11 +30,6 @@ class SchemaObject(SchemaType):
             dom_info: DOMInfo = None
     ) -> Any:
         return self.object_type(value, dom_info)
-
-    @property
-    def schema_ref_name(self) -> Optional[str]:
-        if issubclass(self.object_type, DOMObject):
-            return f"{self.object_type.__module__}.{self.object_type.__name__}"
 
     @property
     def referenced_schemas(self) -> Dict[str, Schema]:

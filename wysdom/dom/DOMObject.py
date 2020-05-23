@@ -4,8 +4,6 @@ from typing import Any, Iterator, Dict, Type
 
 from collections.abc import Mapping, MutableMapping
 
-from copy import deepcopy
-
 from ..exceptions import ValidationError
 from ..base_schema import SchemaAnything
 
@@ -107,16 +105,15 @@ class DOMObject(DOMElement, MutableMapping):
 
     def __copy__(self) -> DOMObject:
         cls = self.__class__
-        return cls(dict(self))
+        result = cls.__new__(cls)
+        super(DOMObject, result).__init__(json_dom_info=self.__json_dom_info__)
+        result.__json_element_data__ = dict(self.__json_element_data__)
+        return result
 
     def __deepcopy__(self, memo: Dict[int, DOMElement]) -> DOMObject:
         cls = self.__class__
-        # noinspection PyArgumentList
         result = cls(
-            value={
-                k: deepcopy(v, memo)
-                for k, v in self.items()
-            },
+            value=self.to_builtin(),
             json_dom_info=self.__json_dom_info__
         )
         memo[id(self)] = result

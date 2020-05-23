@@ -36,6 +36,7 @@ def step_impl(context):
 
 @then("the following statements are true")
 def step_impl(context):
+    # raise Exception(schema(example).jsonschema_full_schema)
     assert callable(document)
     assert callable(parent)
     assert callable(key)

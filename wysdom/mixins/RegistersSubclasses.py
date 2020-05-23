@@ -27,19 +27,20 @@ class RegistersSubclasses(ABC):
 
         cls._registration_namespace = cls._get_registration_namespace()
 
-        if register_as:
-            key = (cls.registration_namespace(), str(register_as))
-            if (
-                key in cls._registered_subclasses
-                and cls._registered_subclasses[key] is not cls
-            ):
-                raise Exception(
-                    f"""
-                    Cannot register {cls} as {register_as}:
-                    Already used by {cls._registered_subclasses[key]}.
-                    """)
-            cls._registered_subclasses[key] = cls
-            cls.registered_name = str(register_as)
+        registered_name = register_as or cls._get_class_namespace(cls)
+
+        key = (cls.registration_namespace(), str(registered_name))
+        if (
+            key in cls._registered_subclasses
+            and cls._registered_subclasses[key] is not cls
+        ):
+            raise ValueError(
+                f"""
+                Cannot register {cls} as {registered_name}:
+                Already used by {cls._registered_subclasses[key]}.
+                """)
+        cls._registered_subclasses[key] = cls
+        cls.registered_name = str(registered_name)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
