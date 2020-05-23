@@ -4,8 +4,6 @@ from abc import ABC
 
 from typing import Type, Optional, Any, Dict
 
-import inspect
-
 
 class RegistersSubclasses(ABC):
     """
@@ -15,8 +13,7 @@ class RegistersSubclasses(ABC):
     """
 
     registered_name = None
-    _registration_namespace = None
-    _registered_subclasses = {}
+    __registered_subclasses__: Optional[Dict[str, Type[RegistersSubclasses]]] = None
 
     def __init_subclass__(
         cls,
@@ -25,39 +22,27 @@ class RegistersSubclasses(ABC):
     ) -> None:
         super().__init_subclass__(**kwargs)
 
-        cls._registration_namespace = cls._get_registration_namespace()
+        if cls.__registered_subclasses__ is None and RegistersSubclasses in cls.__bases__:
+            cls.__registered_subclasses__ = {}
 
-        registered_name = register_as or cls._get_class_namespace(cls)
-
-        key = (cls.registration_namespace(), str(registered_name))
+        key = register_as or f"{cls.__module__}.{cls.__name__}"
+        if not isinstance(key, str):
+            raise TypeError(
+                f"Parameter register_as must be a string, not {type(register_as)}")
         if (
-            key in cls._registered_subclasses
-            and cls._registered_subclasses[key] is not cls
+            key in cls.__registered_subclasses__
+            and cls.__registered_subclasses__[key] is not cls
         ):
             raise ValueError(
                 f"""
-                Cannot register {cls} as {registered_name}:
-                Already used by {cls._registered_subclasses[key]}.
+                Cannot register {cls} as {key}:
+                Already used by {cls.__registered_subclasses__[key]}.
                 """)
-        cls._registered_subclasses[key] = cls
-        cls.registered_name = str(registered_name)
+        cls.__registered_subclasses__[key] = cls
+        cls.registered_name = key
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-
-    @classmethod
-    def registration_namespace(cls) -> str:
-        """
-        :return: The registration namespace for this class.
-        """
-        try:
-            return cls._registration_namespace
-        except AttributeError:
-            raise AttributeError(
-                "Cannot find attribute '_registration_namespace'. "
-                "Has another class overridden __init_subclass__ "
-                "without calling super().__init_subclass__?"
-            )
 
     @classmethod
     def registered_subclasses(cls) -> Dict[str, Type[RegistersSubclasses]]:
@@ -68,23 +53,10 @@ class RegistersSubclasses(ABC):
         """
         return {
             name: subclass
-            for namespace, name, subclass in [
-                (*key, subclass)
-                for key, subclass in cls._registered_subclasses.items()
-            ]
-            if namespace == cls.registration_namespace()
-            and issubclass(subclass, cls)
+            for name, subclass in cls.__registered_subclasses__.items()
+            if issubclass(subclass, cls)
             and subclass is not cls
         }
-
-    @classmethod
-    def is_base_class(cls) -> bool:
-        """
-        Return True if this class is the base class for the namespace,
-        i.e. the class that first declared RegisteredSubclasses as
-        one of its bases.
-        """
-        return cls._get_class_namespace(cls) == cls.registration_namespace()
 
     @classmethod
     def registered_subclass(cls, name: str) -> Type[RegistersSubclasses]:
@@ -95,11 +67,10 @@ class RegistersSubclasses(ABC):
                      `register_as` when the class was declared.
         :return:     A subclass of the base class for the namespace.
         """
-        key = (cls.registration_namespace(), name)
-        if key not in cls._registered_subclasses:
+        if name not in cls.__registered_subclasses__:
             raise KeyError(
                 f"Unknown registered subclass key: {name}")
-        return cls._registered_subclasses[key]
+        return cls.__registered_subclasses__[name]
 
     @classmethod
     def registered_subclass_instance(
@@ -118,16 +89,3 @@ class RegistersSubclasses(ABC):
         :return:
         """
         return cls.registered_subclass(name)(*args, **kwargs)
-
-    @classmethod
-    def _get_registration_namespace(cls) -> str:
-        return [
-            cls._get_class_namespace(ancestor)
-            for ancestor in inspect.getmro(cls)
-            if RegistersSubclasses in ancestor.__bases__
-        ][0]
-
-    @staticmethod
-    def _get_class_namespace(cls: type) -> str:
-        return f"{cls.__module__}.{cls.__name__}"
-
