@@ -2,11 +2,11 @@ from typing import Dict, List
 
 from abc import ABC, abstractmethod
 
-from wysdom import UserObject, UserProperty, SchemaArray, SchemaDict, SchemaConst
+from wysdom import UserObject, UserProperty, SchemaArray, SchemaConst
 from wysdom.mixins import RegistersSubclasses
 
 
-class Pet(RegistersSubclasses, UserObject, ABC):
+class Pet(UserObject, RegistersSubclasses, ABC):
     pet_type: str = UserProperty(str)
     name: str = UserProperty(str)
 
@@ -16,10 +16,16 @@ class Pet(RegistersSubclasses, UserObject, ABC):
 
 
 class Dog(Pet):
-    pet_type: str = UserProperty(SchemaConst("dog"))
 
     def speak(self):
         return f"{self.name} says Woof!"
+
+
+class Greyhound(Dog):
+    pet_type: str = UserProperty(SchemaConst("greyhound"))
+
+    def speak(self):
+        return f"{self.name}, the greyhound, says Woof!"
 
 
 class Cat(Pet):

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Iterator, Dict, Type
+from typing import Any, Iterator, Dict
 
 from collections.abc import Mapping, MutableMapping
 
@@ -71,15 +71,6 @@ class DOMObject(DOMElement, MutableMapping):
 
     def __str__(self):
         return str(self.__json_element_data__)
-
-    @classmethod
-    def registered_subclasses(cls) -> Dict[str, Type[DOMObject]]:
-        """
-        Return all of the registered subclasses in this class's namespace.
-
-        :return: A dictionary of subclasses, indexed by registered name.
-        """
-        return {}
 
     def walk_elements(self) -> Iterator[DOMInfo]:
         for key, value in self.items():

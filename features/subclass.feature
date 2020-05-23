@@ -10,7 +10,7 @@ Feature: Test subclassed DOM objects
         "last_name": "Simpson",
         "pets": [
           {
-            "pet_type": "dog",
+            "pet_type": "greyhound",
             "name": "Santa's Little Helper",
           },
           {
@@ -24,10 +24,10 @@ Feature: Test subclassed DOM objects
         "$schema": "http://json-schema.org/draft-07/schema#",
         "$ref": "#/definitions/subclass_module.Person",
         "definitions": {
-          "subclass_module.Dog": {
+          "subclass_module.Greyhound": {
             "type": "object",
             "properties": {
-              "pet_type": {"const": "dog"},
+              "pet_type": {"const": "greyhound"},
               "name": {"type": "string"}
             },
             "additionalProperties": False
@@ -42,7 +42,7 @@ Feature: Test subclassed DOM objects
           },
           "subclass_module.Pet": {
             "anyOf": [
-              {"$ref": "#/definitions/subclass_module.Dog"},
+              {"$ref": "#/definitions/subclass_module.Greyhound"},
               {"$ref": "#/definitions/subclass_module.Cat"}
             ]
           },
@@ -66,9 +66,9 @@ Feature: Test subclassed DOM objects
       """
       example.first_name == "Marge"
       example.last_name == "Simpson"
-      example.pets[0].pet_type == "dog"
+      example.pets[0].pet_type == "greyhound"
       example.pets[0].name == "Santa's Little Helper"
-      example.pets[0].speak() == "Santa's Little Helper says Woof!"
+      example.pets[0].speak() == "Santa's Little Helper, the greyhound, says Woof!"
       example.pets[1].pet_type == "cat"
       example.pets[1].name == "Snowball II"
       example.pets[1].speak() == "Snowball II says Miaow!"
