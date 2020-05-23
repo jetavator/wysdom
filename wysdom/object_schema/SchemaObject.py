@@ -1,6 +1,6 @@
 from typing import Optional, Dict, Type, Any, Union
 
-from ..dom import DOMInfo
+from ..dom import DOMInfo, DOMObject
 from ..base_schema import SchemaType
 from ..base_schema import Schema
 
@@ -29,15 +29,31 @@ class SchemaObject(SchemaType):
         return self.object_type(value, dom_info)
 
     @property
-    def jsonschema_dict(self) -> Dict[str, Any]:
+    def schema_ref_name(self) -> Optional[str]:
+        if issubclass(self.object_type, DOMObject):
+            return f"{self.object_type.__module__}.{self.object_type.__name__}"
+
+    @property
+    def referenced_schemas(self) -> Dict[str, Schema]:
+        referenced_schemas = {}
+        if isinstance(self.additional_properties, Schema):
+            referenced_schemas.update(self.additional_properties.referenced_schemas)
+        for schema in self.properties.values():
+            referenced_schemas.update(schema.referenced_schemas)
+        if isinstance(self.schema_ref_name, str):
+            referenced_schemas[self.schema_ref_name] = self
+        return referenced_schemas
+
+    @property
+    def jsonschema_definition(self) -> Dict[str, Any]:
         return {
-            **super().jsonschema_dict,
+            **super().jsonschema_definition,
             'properties': {
-                k: v.jsonschema_dict
+                k: v.jsonschema_ref_schema
                 for k, v in self.properties.items()
             },
             "additionalProperties": (
-                self.additional_properties.jsonschema_dict
+                self.additional_properties.jsonschema_ref_schema
                 if isinstance(self.additional_properties, Schema)
                 else self.additional_properties
             )

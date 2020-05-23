@@ -15,7 +15,7 @@ class SchemaType(Schema, ABC):
         pass
 
     @property
-    def jsonschema_dict(self) -> Dict[str, Any]:
+    def jsonschema_definition(self) -> Dict[str, Any]:
         return {"type": self.type_name}
 
 

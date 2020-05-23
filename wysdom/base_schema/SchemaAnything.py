@@ -1,4 +1,4 @@
-from typing import Any, Dict, Tuple
+from typing import Any, Dict
 
 from .Schema import Schema
 
@@ -6,5 +6,5 @@ from .Schema import Schema
 class SchemaAnything(Schema):
 
     @property
-    def jsonschema_dict(self) -> Dict[str, Any]:
+    def jsonschema_definition(self) -> Dict[str, Any]:
         return {}

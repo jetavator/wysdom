@@ -28,9 +28,13 @@ class SchemaArray(Schema):
         )
 
     @property
-    def jsonschema_dict(self) -> Dict[str, Any]:
+    def referenced_schemas(self) -> Dict[str, Schema]:
+        return self.items.referenced_schemas
+
+    @property
+    def jsonschema_definition(self) -> Dict[str, Any]:
         return {
             "array": {
-                "items": self.items.jsonschema_dict
+                "items": self.items.jsonschema_ref_schema
             }
         }
