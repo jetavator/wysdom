@@ -90,6 +90,44 @@ properties, you may use the `default_function` parameter::
             default_function=lambda person: person.first_name
         )
 
+Constants
+---------
+
+Sometimes a property should always have one constant value for a given
+schema. A common use case is for properties that identify an object as a
+particular object type.
+
+In this case, use the :class:`wysdom.SchemaConst` class::
+
+    pet_type = UserProperty(SchemaConst("cat"))
+
+
+Arrays and Dicts
+----------------
+
+For complex schemas, it is often necessary to declare a property as
+being an array or a dictionary or other objects.
+
+For an array, use the :class:`wysdom.SchemaArray`. Properties of this type
+function identically to a Python list (specifically a
+:class:`collections.abc.MutableSequence`)::
+
+    related_people = UserProperty(SchemaArray(Person))
+
+For an dictionary, use the :class:`wysdom.SchemaDict`. Properties of this type
+function identically to a Python dict (specifically a
+:class:`collections.abc.MutableMapping` with keys of type :class:`str`)::
+
+    related_people = UserProperty(SchemaDict(Person))
+
+A `SchemaDict` is a special case of a :class:`wysdom.SchemaObject` with
+no named properties and with additional_properties set to the type
+specification that you supply.
+
+For both SchemaArray and SchemaDict you may pass in any type definition that
+you would pass to a UserProperty.
+
+
 DOM functions
 =============
 
