@@ -40,8 +40,8 @@ class Schema(ABC):
     @property
     def schema_ref_name(self) -> Optional[str]:
         """
-        A unique reference name to use when this scheme is referred to by other schemas.
-        If this returns a string, references to this scheme will use the $ref keyword without
+        A unique reference name to use when this schema is referred to by other schemas.
+        If this returns a string, references to this schema will use the $ref keyword without
         replicating the full schema.
         If this property returns None, the full contents of the schema will be used.
 

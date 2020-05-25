@@ -8,10 +8,16 @@ from .Schema import Schema
 
 
 class SchemaType(Schema, ABC):
+    """
+    Abstract base class for any schema with the "type" keyword
+    """
 
     @property
     @abstractmethod
     def type_name(self) -> str:
+        """
+        :return: Value for the JSON schema "type" keyword
+        """
         pass
 
     @property

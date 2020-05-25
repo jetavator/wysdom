@@ -8,18 +8,20 @@ from ..dom import DOMObject
 class UserProperty(object):
     """
     A data descriptor for creating attributes in user-defined subclasses
-    of `UserObject` which are mapped to keys in the underlying
+    of :class:`~.wysdom.user_objects.UserObject` which are mapped to keys in the underlying
     data object and to the `properties` key in the object's JSON schema.
 
     :param property_type:    The data type or schema for this property. Must
                              be one of:
-                             A primitive Python type (str, int, bool, float)
-                             A subclass of `UserObject`
-                             An instance of `JSONSchema`
+
+                             * A primitive Python type (:class:`str`, :class:`int`,
+                               :class:`bool`, :class:`float`)
+                             * A subclass of :class:`~.wysdom.user_objects.UserObject`
+                             * An instance of :class:`~wysdom.base_schema.Schema`
 
     :param name:             The name of this property in the underlying
                              data object. If not provided, this defaults to
-                             the name of the attribute on the `UserObject`
+                             the name of the attribute on the :class:`~.wysdom.user_objects.UserObject`
                              instance that owns the property.
 
     :param default:          A static value which provides a default value
@@ -29,7 +31,7 @@ class UserProperty(object):
     :param default_function: A function which provides a default value
                              for this property. The function must have a
                              single positional argument, `self`, which is
-                             passed the `UserObject` instance that
+                             passed the :class:`~.wysdom.user_objects.UserObject` instance that
                              owns the property. Cannot be set in conjunction
                              with `default`.
     """
@@ -55,7 +57,7 @@ class UserProperty(object):
     ) -> Any:
         if instance is None:
             raise AttributeError(
-                "JSONSchemaProperty is not valid as a class descriptor")
+                "UserProperty is not valid as a class data descriptor")
         if self.name not in instance:
             if self.default_function:
                 instance[self.name] = self.default_function(instance)

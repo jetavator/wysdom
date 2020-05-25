@@ -20,6 +20,9 @@ T_co = TypeVar('T_co')
 
 
 class DOMList(DOMElement, MutableSequence, Generic[T_co]):
+    """
+    An array element (corresponding to a Python list).
+    """
 
     __json_element_data__: List[DOMElement] = None
 
@@ -27,16 +30,23 @@ class DOMList(DOMElement, MutableSequence, Generic[T_co]):
             self,
             value: Iterable,
             json_dom_info: Optional[DOMInfo] = None,
-            _item_type: Optional[Schema] = None
+            item_type: Optional[Schema] = None
     ) -> None:
+        """
+        :param value:         A list (or any :class:`Typing.Iterable`) containing the data to populate this
+                              object's items.
+        :param json_dom_info: A :class:`~wysdom.dom.DOMInfo` named tuple containing information about this object's
+                              position in the DOM.
+        :param item_type:     A :class:`~wysdom.Schema` object specifying what constitutes a valid item in this array.
+        """
         if value and not isinstance(value, Iterable):
             raise ValidationError(
                 f"Cannot validate input. Object is not iterable: {value}"
             )
         super().__init__(None, json_dom_info)
         self.__json_element_data__ = []
-        if _item_type is not None:
-            self.item_type = _item_type
+        if item_type is not None:
+            self.item_type = item_type
         self[:] = value
 
     @overload
@@ -97,6 +107,11 @@ class DOMList(DOMElement, MutableSequence, Generic[T_co]):
         self.__json_element_data__.insert(index, self._new_child_item(item))
 
     def to_builtin(self) -> List[Any]:
+        """
+        Returns the contents of this DOM object as a Python builtin.
+
+        :return: A Python list containing this object's data
+        """
         return [
             (
                 v.to_builtin()
@@ -107,6 +122,7 @@ class DOMList(DOMElement, MutableSequence, Generic[T_co]):
         ]
 
     def walk_elements(self) -> Iterator[DOMInfo]:
+        yield self.__json_dom_info__
         for value in self:
             if isinstance(value, DOMElement):
                 yield from value.walk_elements()

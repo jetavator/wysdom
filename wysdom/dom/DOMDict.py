@@ -14,17 +14,26 @@ T_co = TypeVar('T_co')
 
 
 class DOMDict(DOMObject, Generic[T_co]):
-
-    _additional_properties: Schema = None
+    """
+    An object with dynamic properties (corresponding to a Python dict).
+    """
 
     def __init__(
             self,
             value: Optional[Mapping[str, Any]] = None,
             json_dom_info: Optional[DOMInfo] = None,
-            _item_type: Optional[Schema] = None
+            item_type: Optional[Schema] = None
     ) -> None:
+        """
+        :param value:         A dict (or any :class:`collections.abc.Mapping`) containing the data to populate this
+                              object's properties.
+        :param json_dom_info: A :class:`~wysdom.dom.DOMInfo` named tuple containing information about this object's
+                              position in the DOM.
+        :param item_type:     A :class:`~wysdom.Schema` object specifying what constitutes a valid property
+                              of this object.
+        """
         self.__json_schema_properties__ = DOMProperties(
-            additional_properties=(_item_type or SchemaAnything())
+            additional_properties=(item_type or SchemaAnything())
         )
         super().__init__(
             value or {},

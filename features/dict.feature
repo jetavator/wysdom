@@ -72,6 +72,7 @@ Feature: Test dictionary DOM objects
           }
         }
       }
+      walk_elements = list(example.walk_elements())
       """
     Then the following statements are true:
       """
@@ -111,6 +112,26 @@ Feature: Test dictionary DOM objects
       copy.copy(example).to_builtin() == example_dict_input
       copy.deepcopy(example).to_builtin() == example_dict_input
       """
+    And the list walk_elements contains the following tuples:
+      | element                       | document | parent                        | element_key          |
+      | example                       | example  | None                          | None                 |
+      | "Marge"                       | example  | example                       | "first_name"         |
+      | "Simpson"                     | example  | example                       | "last_name"          |
+      | example.current_address       | example  | example                       | "current_address"    |
+      | "123 Fake Street"             | example  | example.current_address       | "first_line"         |
+      | ""                            | example  | example.current_address       | "second_line"        |
+      | "Springfield"                 | example  | example.current_address       | "city"               |
+      | 58008                         | example  | example.current_address       | "postal_code"        |
+      | example.previous_addresses    | example  | example                       | "previous_addresses" |
+      | example.previous_addresses[0] | example  | example.previous_addresses    | None                 |
+      | "742 Evergreen Terrace"       | example  | example.previous_addresses[0] | "first_line"         |
+      | ""                            | example  | example.previous_addresses[0] | "second_line"        |
+      | "Springfield"                 | example  | example.previous_addresses[0] | "city"               |
+      | 58008                         | example  | example.previous_addresses[0] | "postal_code"        |
+      | example.vehicles              | example  | example                       | "vehicles"           |
+      | example.vehicles["eabf04"]    | example  | example.vehicles              | "eabf04"             |
+      | "orange"                      | example  | example.vehicles["eabf04"]    | "color"              |
+      | "Station Wagon"               | example  | example.vehicles["eabf04"]    | "description"        |
 
   Scenario: Test bad input string
 

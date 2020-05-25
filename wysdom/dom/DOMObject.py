@@ -14,6 +14,9 @@ from .functions import document
 
 
 class DOMObject(DOMElement, MutableMapping):
+    """
+    An object with named properties.
+    """
 
     __json_schema_properties__: DOMProperties = None
     __json_element_data__: Dict[str, DOMElement] = None
@@ -23,6 +26,12 @@ class DOMObject(DOMElement, MutableMapping):
             value: Mapping[str, Any] = None,
             json_dom_info: DOMInfo = None
     ) -> None:
+        """
+        :param value:         A dict (or any :class:`collections.abc.Mapping`) containing the data to populate this
+                              object's properties.
+        :param json_dom_info: A :class:`~wysdom.dom.DOMInfo` named tuple containing information about this object's
+                              position in the DOM.
+        """
         if value and not isinstance(value, Mapping):
             raise ValidationError(
                 f"Cannot validate input. Object is not a mapping: {value}"
@@ -73,6 +82,7 @@ class DOMObject(DOMElement, MutableMapping):
         return str(self.__json_element_data__)
 
     def walk_elements(self) -> Iterator[DOMInfo]:
+        yield self.__json_dom_info__
         for key, value in self.items():
             if isinstance(value, DOMElement):
                 yield from value.walk_elements()
