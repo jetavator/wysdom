@@ -1,54 +1,42 @@
-wysdom.object\_schema package
+object\_schema
 =============================
 
-Submodules
-----------
-
-wysdom.object\_schema.SchemaAnyOf module
+SchemaAnyOf
 ----------------------------------------
 
-.. automodule:: wysdom.object_schema.SchemaAnyOf
+.. autoclass:: wysdom.SchemaAnyOf
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.object\_schema.SchemaArray module
+SchemaArray
 ----------------------------------------
 
-.. automodule:: wysdom.object_schema.SchemaArray
+.. autoclass:: wysdom.SchemaArray
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.object\_schema.SchemaDict module
+SchemaDict
 ---------------------------------------
 
-.. automodule:: wysdom.object_schema.SchemaDict
+.. autoclass:: wysdom.SchemaDict
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.object\_schema.SchemaObject module
+SchemaObject
 -----------------------------------------
 
-.. automodule:: wysdom.object_schema.SchemaObject
+.. autoclass:: wysdom.SchemaObject
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.object\_schema.resolve\_arg\_to\_type module
+resolve\_arg\_to\_type
 ---------------------------------------------------
 
 .. automodule:: wysdom.object_schema.resolve_arg_to_type
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: wysdom.object_schema
    :members:
    :undoc-members:
    :show-inheritance:

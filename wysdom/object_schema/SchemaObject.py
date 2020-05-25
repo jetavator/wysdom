@@ -9,7 +9,7 @@ class SchemaObject(SchemaType):
     """
     A schema specifying an object with named properties.
 
-    :param properties:            A dictionary of `Schema` object defining the expected
+    :param properties:            A dictionary of `Schema` objects defining the expected
                                   names and types of this object's properties.
     :param additional_properties: Defines whether this object permits additional
                                   dynamically-named properties. Can be True or False, or

@@ -1,3 +1,6 @@
+Welcome to wysdom!
+##################
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -7,7 +10,7 @@
 
 
 A-Z Index
-#########
+=========
 
 * :ref:`genindex`
 

@@ -17,12 +17,24 @@ from .UserProperty import UserProperty
 
 
 class UserProperties(DOMProperties):
+    """
+    A container for property information for a :class:`.UserObject` subclass.
+    """
 
     def __init__(
             self,
             user_class: Type[UserObject],
             additional_properties: Union[bool, Schema] = False
     ):
+        """
+        :param user_class:            The subclass of :class:`.UserObject` to extract properties from.
+                                      Properties will be extracted from the class's
+                                      :class:`~wysdom.user_objects.UserProperty` descriptors.
+        :param additional_properties: Defines whether a :class:`.DOMObject` permits additional
+                                      dynamically-named properties. Can be True or False, or
+                                      can be set to a specific :class:`~wysdom.base_schema.Schema`
+                                      to restrict the permitted types of any additional properties.
+        """
         self._user_class = user_class
         properties = {}
         for superclass in reversed(list(self._schema_superclasses())):

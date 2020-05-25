@@ -34,5 +34,5 @@ class SchemaDict(SchemaObject):
         return DOMDict(
             value,
             dom_info,
-            _item_type=self.additional_properties
+            item_type=self.additional_properties
         )

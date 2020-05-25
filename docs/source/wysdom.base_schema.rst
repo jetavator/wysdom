@@ -1,62 +1,50 @@
-wysdom.base\_schema package
+base\_schema
 ===========================
 
-Submodules
-----------
-
-wysdom.base\_schema.Schema module
+Schema
 ---------------------------------
 
-.. automodule:: wysdom.base_schema.Schema
+.. autoclass:: wysdom.Schema
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.base\_schema.SchemaAnything module
+SchemaAnything
 -----------------------------------------
 
-.. automodule:: wysdom.base_schema.SchemaAnything
+.. autoclass:: wysdom.SchemaAnything
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.base\_schema.SchemaConst module
+SchemaConst
 --------------------------------------
 
-.. automodule:: wysdom.base_schema.SchemaConst
+.. autoclass:: wysdom.SchemaConst
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.base\_schema.SchemaNone module
+SchemaNone
 -------------------------------------
 
-.. automodule:: wysdom.base_schema.SchemaNone
+.. autoclass:: wysdom.SchemaNone
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.base\_schema.SchemaPrimitive module
+SchemaPrimitive
 ------------------------------------------
 
-.. automodule:: wysdom.base_schema.SchemaPrimitive
+.. autoclass:: wysdom.SchemaPrimitive
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.base\_schema.SchemaType module
+SchemaType
 -------------------------------------
 
-.. automodule:: wysdom.base_schema.SchemaType
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: wysdom.base_schema
+.. autoclass:: wysdom.SchemaType
    :members:
    :undoc-members:
    :show-inheritance:

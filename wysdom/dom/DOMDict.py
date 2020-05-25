@@ -25,11 +25,11 @@ class DOMDict(DOMObject, Generic[T_co]):
             item_type: Optional[Schema] = None
     ) -> None:
         """
-        :param value:         A dict (or any `Mapping`) containing the data to populate this
+        :param value:         A dict (or any :class:`collections.abc.Mapping`) containing the data to populate this
                               object's properties.
-        :param json_dom_info: A `DOMInfo` named tuple containing information about this object's
+        :param json_dom_info: A :class:`~wysdom.dom.DOMInfo` named tuple containing information about this object's
                               position in the DOM.
-        :param item_type:     A `Schema` object specifying what constitutes a valid property
+        :param item_type:     A :class:`~wysdom.Schema` object specifying what constitutes a valid property
                               of this object.
         """
         self.__json_schema_properties__ = DOMProperties(

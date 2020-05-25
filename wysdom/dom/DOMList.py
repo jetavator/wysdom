@@ -35,9 +35,9 @@ class DOMList(DOMElement, MutableSequence, Generic[T_co]):
         """
         :param value:         A list (or any :class:`Typing.Iterable`) containing the data to populate this
                               object's items.
-        :param json_dom_info: A `DOMInfo` named tuple containing information about this object's
+        :param json_dom_info: A :class:`~wysdom.dom.DOMInfo` named tuple containing information about this object's
                               position in the DOM.
-        :param item_type:     A `Schema` object specifying what constitutes a valid item in this array.
+        :param item_type:     A :class:`~wysdom.Schema` object specifying what constitutes a valid item in this array.
         """
         if value and not isinstance(value, Iterable):
             raise ValidationError(
@@ -107,6 +107,11 @@ class DOMList(DOMElement, MutableSequence, Generic[T_co]):
         self.__json_element_data__.insert(index, self._new_child_item(item))
 
     def to_builtin(self) -> List[Any]:
+        """
+        Returns the contents of this DOM object as a Python builtin.
+
+        :return: A Python list containing this object's data
+        """
         return [
             (
                 v.to_builtin()

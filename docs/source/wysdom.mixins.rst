@@ -1,38 +1,26 @@
-wysdom.mixins package
+mixins
 =====================
 
-Submodules
-----------
-
-wysdom.mixins.ReadsJSON module
+ReadsJSON
 ------------------------------
 
-.. automodule:: wysdom.mixins.ReadsJSON
+.. autoclass:: wysdom.mixins.ReadsJSON
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.mixins.ReadsYAML module
+ReadsYAML
 ------------------------------
 
-.. automodule:: wysdom.mixins.ReadsYAML
+.. autoclass:: wysdom.mixins.ReadsYAML
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.mixins.RegistersSubclasses module
+RegistersSubclasses
 ----------------------------------------
 
-.. automodule:: wysdom.mixins.RegistersSubclasses
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: wysdom.mixins
+.. autoclass:: wysdom.mixins.RegistersSubclasses
    :members:
    :undoc-members:
    :show-inheritance:

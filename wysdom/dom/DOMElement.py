@@ -41,7 +41,7 @@ class DOMElement(ABC):
     ) -> None:
         """
         :param value:         A data structure containing the data to populate this element.
-        :param json_dom_info: A :class:`DOMInfo` named tuple containing information about this object's
+        :param json_dom_info: A :class:`~wysdom.dom.DOMInfo` named tuple containing information about this object's
                               position in the DOM.
         :param kwargs:        Keyword arguments.
         """
@@ -78,9 +78,9 @@ class DOMElement(ABC):
     def walk_elements(self) -> Iterator[DOMInfo]:
         """
         Walk through the full tree structure within this DOM element.
-        Returns an iterator of :class:`DOMInfo` tuples in the form
+        Returns an iterator of :class:`~wysdom.dom.DOMInfo` tuples in the form
         (element, document, parent element_key).
 
-        :return: An iterator of :class:`DOMInfo` tuples.
+        :return: An iterator of :class:`~wysdom.dom.DOMInfo` tuples.
         """
         yield self.__json_dom_info__

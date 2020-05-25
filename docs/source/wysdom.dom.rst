@@ -1,62 +1,59 @@
-wysdom.dom package
+dom
 ==================
 
-Submodules
-----------
-
-wysdom.dom.DOMDict module
+DOMDict
 -------------------------
 
-.. automodule:: wysdom.dom.DOMDict
+.. autoclass:: wysdom.dom.DOMDict
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.dom.DOMElement module
+DOMElement
 ----------------------------
 
-.. automodule:: wysdom.dom.DOMElement
+.. autoclass:: wysdom.dom.DOMElement
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.dom.DOMList module
+DOMInfo
+----------------------------
+
+.. autoclass:: wysdom.dom.DOMInfo
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+DOMList
 -------------------------
 
-.. automodule:: wysdom.dom.DOMList
+.. autoclass:: wysdom.dom.DOMList
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.dom.DOMObject module
+DOMObject
 ---------------------------
 
-.. automodule:: wysdom.dom.DOMObject
+.. autoclass:: wysdom.dom.DOMObject
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.dom.DOMProperties module
+DOMProperties
 -------------------------------
 
-.. automodule:: wysdom.dom.DOMProperties
+.. autoclass:: wysdom.dom.DOMProperties
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.dom.functions module
+functions
 ---------------------------
 
 .. automodule:: wysdom.dom.functions
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: wysdom.dom
    :members:
    :undoc-members:
    :show-inheritance:

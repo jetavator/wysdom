@@ -27,9 +27,9 @@ class DOMObject(DOMElement, MutableMapping):
             json_dom_info: DOMInfo = None
     ) -> None:
         """
-        :param value:         A dict (or any `Mapping`) containing the data to populate this
+        :param value:         A dict (or any :class:`collections.abc.Mapping`) containing the data to populate this
                               object's properties.
-        :param json_dom_info: A `DOMInfo` named tuple containing information about this object's
+        :param json_dom_info: A :class:`~wysdom.dom.DOMInfo` named tuple containing information about this object's
                               position in the DOM.
         """
         if value and not isinstance(value, Mapping):

@@ -10,17 +10,13 @@ User objects API
 =================
 
 To build custom user object definitions in a declarative style,
-you do so by creating subclasses of `wysdom.UserObject`.
+you do so by creating subclasses of :class:`wysdom.UserObject`.
 Instances of your subclass will behave as a `MutableMapping`,
 so any code that works on the underlying dict that you use to
 populate it should also work on the object instance.
 
-.. autoclass:: wysdom.UserObject
-   :members:
-   :inherited-members:
-
 There are two ways to add properties to a UserObject. The first
-is to add named properties, by using the `wysdom.UserProperty`
+is to add named properties, by using the :class:`wysdom.UserProperty`
 data descriptor::
 
     class Person(UserObject):
@@ -38,7 +34,7 @@ using the subscript style, `object_instance[property_name]`.
 You may also restrict the data types of the additional properties
 that you will allow. The type parameter that you pass in to
 `additional_properties` can be a primitive Python type, a subclass
-of `UserObject`, or an instance of `wysdom.Schema`::
+of :class:`~wysdom.UserProperty`, or an instance of :class:`~wysdom.Schema`::
 
     class Person(UserObject, additional_properties=str):
         ...
@@ -49,14 +45,12 @@ of `UserObject`, or an instance of `wysdom.Schema`::
     class Person(UserObject, additional_properties=SchemaDict[Vehicle]):
         ...
 
-.. autoclass:: wysdom.UserProperty
-   :members:
 
 Property Types
 --------------
 
-The type parameter that you pass in to `UserProperty` can be a primitive
-Python type, a subclass of `UserObject`, or an instance of `wysdom.Schema`::
+The type parameter that you pass in to :class:`~wysdom.UserProperty` can be a primitive
+Python type, a subclass of :class:`~wysdom.UserProperty`, or an instance of :class:`~wysdom.Schema`::
 
     class Person(UserObject):
         first_name = UserProperty(str)
@@ -124,8 +118,8 @@ and writing JSON and YAML
 ReadsJSON
 ---------
 
-Usage: As in the first usage example, but add ReadsJSON to the
-bases of Person::
+Usage: As in the first usage example, but add :class:`wysdom.mixins.ReadsJSON`
+to the bases of Person::
 
     class Person(UserObject, ReadsJSON):
         first_name = UserProperty(str)
@@ -160,14 +154,12 @@ bases of Person::
         """
     )
 
-.. autoclass:: wysdom.ReadsJSON
-   :members:
 
 ReadsYAML
 ---------
 
-Usage: As in the first usage example, but add ReadsYAML to the
-bases of Person::
+Usage: As in the first usage example, but add :class:`wysdom.mixins.ReadsYAML`
+to the bases of Person::
 
     class Person(UserObject, ReadsYAML):
         first_name = UserProperty(str)
@@ -196,14 +188,11 @@ bases of Person::
         """
     )
 
-.. autoclass:: wysdom.ReadsYAML
-   :members:
-
 
 RegistersSubclasses
 -------------------
 
-Use `RegistersSubclasses` as a mixin if you want an abstract base class to
+Use :class:`wysdom.mixins.RegistersSubclasses` as a mixin if you want an abstract base class to
 have several more specific subclasses::
 
     class Pet(UserObject, RegistersSubclasses, ABC):
@@ -277,18 +266,11 @@ create an instance from its parent class::
     'Stampy says Trumpet!'
 
 
-.. autoclass:: wysdom.RegistersSubclasses
-   :members:
-
-
 Internals
 =========
 
-Schema objects
---------------
-
-.. autoclass:: wysdom.Schema
-   :members:
+Schemas
+-------
 
 Base schemas
 ............
@@ -296,16 +278,16 @@ Base schemas
 The following schemas define simple atomic schemas
 (defined in the subpackage `wysdom.base_schema`):
 
-===============  ==================================================================
-Name             Description
-===============  ==================================================================
-Schema           abstract base class
-SchemaType       abstract base class for any schema with the "type" directive
-SchemaAnything   any valid JSON will be accepted
-SchemaConst      a string constant
-SchemaNone       a null value
-SchemaPrimitive  a primitive variable
-===============  ==================================================================
+================================  ==================================================================
+Name                              Description
+================================  ==================================================================
+:class:`~wysdom.Schema`           abstract base class
+:class:`~wysdom.SchemaType`       abstract base class for any schema with the "type" directive
+:class:`~wysdom.SchemaAnything`   any valid JSON will be accepted
+:class:`~wysdom.SchemaConst`      a string constant
+:class:`~wysdom.SchemaNone`       a null value
+:class:`~wysdom.SchemaPrimitive`  a primitive variable
+================================  ==================================================================
 
 Object schemas
 ..............
@@ -313,11 +295,11 @@ Object schemas
 The following schemas define complex schemas which reference other schemas
 (defined in the subpackage `wysdom.object_schema`):
 
-===============  ==================================================================
-Name             Description
-===============  ==================================================================
-SchemaAnyOf      Any of the permitted schemas supplied
-SchemaArray      An array (corresponding to a Python list)
-SchemaObject     An object with named properties
-SchemaDict       An object with dynamic properties (corresponding to a Python dict)
-===============  ==================================================================
+================================  ==================================================================
+Name                              Description
+================================  ==================================================================
+:class:`~wysdom.SchemaAnyOf`      Any of the permitted schemas supplied
+:class:`~wysdom.SchemaArray`      An array (corresponding to a Python list)
+:class:`~wysdom.SchemaObject`     An object with named properties
+:class:`~wysdom.SchemaDict`       An object with dynamic properties (corresponding to a Python dict)
+================================  ==================================================================

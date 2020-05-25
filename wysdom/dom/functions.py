@@ -39,7 +39,7 @@ def parent(element: DOMElement) -> Optional[DOMElement]:
 def key(element: DOMElement) -> Optional[str]:
     """
     Retrieve the key of a particular :class:`.DOMElement` in its parent element, if it can be
-    referred to by a key (i.e. if it its parent element is a :class:`Mapping`).
+    referred to by a key (i.e. if it its parent element is a :class:`collections.abc.Mapping`).
 
     :param element: A DOM element
     :return:        The key of that DOM element in its parent, or None if it has no key
@@ -49,11 +49,11 @@ def key(element: DOMElement) -> Optional[str]:
 
 def schema(element: DOMElement) -> Schema:
     """
-    Retrieve the :class:`~wysdom.base_schema.Schema.Schema` object for
+    Retrieve the :class:`~wysdom.base_schema.Schema` object for
     a particular :class:`.DOMElement`.
 
     :param element: A DOM element
-    :return:        The :class:`~wysdom.base_schema.Schema.Schema` object associated
+    :return:        The :class:`~wysdom.base_schema.Schema` object associated
                     with that DOM element
     """
     return element.__json_schema__()

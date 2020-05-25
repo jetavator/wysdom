@@ -1,30 +1,26 @@
-wysdom.user\_objects package
+user\_objects
 ============================
 
-Submodules
-----------
-
-wysdom.user\_objects.UserObject module
+UserObject
 --------------------------------------
 
-.. automodule:: wysdom.user_objects.UserObject
+.. autoclass:: wysdom.UserObject
    :members:
    :undoc-members:
    :show-inheritance:
 
-wysdom.user\_objects.UserProperty module
+UserProperties
+--------------------------------------
+
+.. autoclass:: wysdom.user_objects.UserProperties
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+UserProperty
 ----------------------------------------
 
-.. automodule:: wysdom.user_objects.UserProperty
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: wysdom.user_objects
+.. autoclass:: wysdom.UserProperty
    :members:
    :undoc-members:
    :show-inheritance:
