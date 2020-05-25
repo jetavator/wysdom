@@ -54,3 +54,22 @@ def step_impl(context, exception_type):
     except Exception as e:
         if e.__class__.__name__ != exception_type:
             raise
+
+@then("the list {variable_name} contains the following tuples")
+def step_impl(context, variable_name):
+    tuple_list = eval(variable_name)
+
+    def matches(a, b):
+        return a is b or a == b
+
+    for x in context.table:
+        if not any(
+            matches(y.element, eval(x["element"]))
+            and matches(y.document, eval(x["document"]))
+            and matches(y.parent, eval(x["parent"]))
+            and matches(y.element_key,  eval(x["element_key"]))
+            for y in tuple_list
+        ):
+            raise Exception(f"Could not find {x}")
+    if len(list(context.table)) != len(tuple_list):
+        raise Exception("Lengths of lists do not match")

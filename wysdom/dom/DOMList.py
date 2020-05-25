@@ -122,6 +122,7 @@ class DOMList(DOMElement, MutableSequence, Generic[T_co]):
         ]
 
     def walk_elements(self) -> Iterator[DOMInfo]:
+        yield self.__json_dom_info__
         for value in self:
             if isinstance(value, DOMElement):
                 yield from value.walk_elements()

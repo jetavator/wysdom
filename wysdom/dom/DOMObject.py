@@ -82,6 +82,7 @@ class DOMObject(DOMElement, MutableMapping):
         return str(self.__json_element_data__)
 
     def walk_elements(self) -> Iterator[DOMInfo]:
+        yield self.__json_dom_info__
         for key, value in self.items():
             if isinstance(value, DOMElement):
                 yield from value.walk_elements()
