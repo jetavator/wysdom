@@ -8,6 +8,16 @@ from ..base_schema import Schema, SchemaAnything
 
 
 class DOMInfo(NamedTuple):
+    """
+    Named tuple containing information about a DOM element's position within the DOM.
+
+    :param element:     The :class:`DOMElement` that this DOMInfo tuple provides information for.
+    :param document:    The owning document for a :class:`DOMElement`, if it exists.
+    :param parent:      The parent element of a :class:`DOMElement`, if it exists.
+    :param element_key: The key of a particular :class:`DOMElement` in its parent element,
+                        if it can be referred to by a key (i.e. if it its parent element
+                        is a Mapping).
+    """
 
     element: Optional[DOMElement] = None
     document: Optional[DOMElement] = None
@@ -16,6 +26,9 @@ class DOMInfo(NamedTuple):
 
 
 class DOMElement(ABC):
+    """
+    Abstract base class for any DOM element.
+    """
 
     __json_dom_info__: DOMInfo = None
 
@@ -26,6 +39,12 @@ class DOMElement(ABC):
             json_dom_info: DOMInfo = None,
             **kwargs: Any
     ) -> None:
+        """
+        :param value:         A data structure containing the data to populate this element.
+        :param json_dom_info: A :class:`DOMInfo` named tuple containing information about this object's
+                              position in the DOM.
+        :param kwargs:        Keyword arguments.
+        """
         if value is not None:
             raise ValueError(
                 "The parameter 'value' must be handled by a non-abstract subclass."
@@ -50,7 +69,18 @@ class DOMElement(ABC):
 
     @abstractmethod
     def to_builtin(self) -> Any:
+        """
+        Returns the contents of this DOM object as a Python builtin. Return type
+        varies depending on the specific object type.
+        """
         pass
 
     def walk_elements(self) -> Iterator[DOMInfo]:
+        """
+        Walk through the full tree structure within this DOM element.
+        Returns an iterator of :class:`DOMInfo` tuples in the form
+        (element, document, parent element_key).
+
+        :return: An iterator of :class:`DOMInfo` tuples.
+        """
         yield self.__json_dom_info__

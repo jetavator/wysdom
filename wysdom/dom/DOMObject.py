@@ -14,6 +14,9 @@ from .functions import document
 
 
 class DOMObject(DOMElement, MutableMapping):
+    """
+    An object with named properties.
+    """
 
     __json_schema_properties__: DOMProperties = None
     __json_element_data__: Dict[str, DOMElement] = None
@@ -23,6 +26,12 @@ class DOMObject(DOMElement, MutableMapping):
             value: Mapping[str, Any] = None,
             json_dom_info: DOMInfo = None
     ) -> None:
+        """
+        :param value:         A dict (or any `Mapping`) containing the data to populate this
+                              object's properties.
+        :param json_dom_info: A `DOMInfo` named tuple containing information about this object's
+                              position in the DOM.
+        """
         if value and not isinstance(value, Mapping):
             raise ValidationError(
                 f"Cannot validate input. Object is not a mapping: {value}"
