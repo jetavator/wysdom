@@ -71,6 +71,24 @@ may specify it explicitly using the `name` parameter::
     class Person(UserObject):
         last_name = UserProperty(str, name="surname")
 
+Optional Properties
+-------------------
+
+If a UserProperty is intended to be an optional property in the underlying
+data object, it can be specified as such using the `optional` parameter::
+
+    class Person(UserObject):
+        ...
+        middle_name = UserProperty(str, optional=True)
+
+If a parameter is not specified as `optional`, it will appear in the
+`required` list in the generated JSON schema and will therefore throw a
+ValidationError if it is missing from any underlying data object that is
+loaded.
+
+If optional properties do not have a `default` or `default_function`, they
+will default to None if not set.
+
 Defaults
 --------
 
@@ -89,6 +107,10 @@ properties, you may use the `default_function` parameter::
             str,
             default_function=lambda person: person.first_name
         )
+
+A UserProperty may not have both a `default` and a `default_function`,
+and if either `default` or `default_function` is set then `optional`
+defaults to True (and cannot be explicitly set to False).
 
 Constants
 ---------

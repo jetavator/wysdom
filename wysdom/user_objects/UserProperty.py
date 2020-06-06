@@ -19,6 +19,10 @@ class UserProperty(object):
                              * A subclass of :class:`~.wysdom.user_objects.UserObject`
                              * An instance of :class:`~wysdom.base_schema.Schema`
 
+    :param optional:         Determines whether this property is optional in the underlying
+                             data object. If default or default_function are set, this
+                             will default to True, otherwise False.
+
     :param name:             The name of this property in the underlying
                              data object. If not provided, this defaults to
                              the name of the attribute on the :class:`~.wysdom.user_objects.UserObject`
@@ -39,12 +43,20 @@ class UserProperty(object):
     def __init__(
             self,
             property_type: Union[Type, Schema],
+            optional: Optional[bool] = None,
             name: Optional[str] = None,
             default: Optional[Any] = None,
             default_function: Optional[Callable] = None
     ) -> None:
-        if default and default_function:
-            raise ValueError("Cannot use both default and default_function.")
+        if default is not None or default_function is not None:
+            if default is not None and default_function is not None:
+                raise ValueError("Cannot use both default and default_function.")
+            if optional is False:
+                raise ValueError(
+                    "Cannot set optional to False if default or default_function are specified.")
+            self.optional = True
+        else:
+            self.optional = bool(optional)
         self.schema_type = resolve_arg_to_schema(property_type)
         self.name = name
         self.default = default

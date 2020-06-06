@@ -55,6 +55,7 @@ def step_impl(context, exception_type):
         if e.__class__.__name__ != exception_type:
             raise
 
+
 @then("the list {variable_name} contains the following tuples")
 def step_impl(context, variable_name):
     tuple_list = eval(variable_name)
