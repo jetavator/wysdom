@@ -30,6 +30,7 @@ Feature: Test subclassed DOM objects
               "pet_type": {"const": "greyhound"},
               "name": {"type": "string"}
             },
+            "required": ["name", "pet_type"],
             "additionalProperties": False
           },
           "subclass_module.Cat": {
@@ -38,6 +39,7 @@ Feature: Test subclassed DOM objects
               "pet_type": {"const": "cat"},
               "name": {"type": "string"}
             },
+            "required": ["name", "pet_type"],
             "additionalProperties": False
           },
           "subclass_module.Pet": {
@@ -57,6 +59,7 @@ Feature: Test subclassed DOM objects
                 }
               }
             },
+            "required": ["first_name", "last_name", "pets"],
             "additionalProperties": False
           }
         }

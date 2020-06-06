@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Type, Any, Union
+from typing import Optional, Dict, Type, Any, Union, Set
 
 from ..dom import DOMInfo
 from ..base_schema import SchemaType
@@ -23,17 +23,20 @@ class SchemaObject(SchemaType):
 
     type_name: str = "object"
     properties: Optional[Dict[str, Schema]] = None
+    required: Set[str] = None
     additional_properties: Union[bool, Schema] = False
     schema_ref_name: Optional[str] = None
 
     def __init__(
             self,
             properties: Optional[Dict[str, Schema]] = None,
+            required: Set[str] = None,
             additional_properties: Union[bool, Schema] = False,
             object_type: Type = dict,
             schema_ref_name: Optional[str] = None
     ) -> None:
         self.properties = properties or {}
+        self.required = required or set()
         self.additional_properties = additional_properties
         self.object_type = object_type
         self.schema_ref_name = schema_ref_name
@@ -60,10 +63,11 @@ class SchemaObject(SchemaType):
     def jsonschema_definition(self) -> Dict[str, Any]:
         return {
             **super().jsonschema_definition,
-            'properties': {
+            "properties": {
                 k: v.jsonschema_ref_schema
                 for k, v in self.properties.items()
             },
+            "required": list(sorted(self.required)),
             "additionalProperties": (
                 self.additional_properties.jsonschema_ref_schema
                 if isinstance(self.additional_properties, Schema)

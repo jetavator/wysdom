@@ -3,8 +3,10 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Tuple, Optional
 
-from ..exceptions import ValidationError
+import jsonschema
 from jsonschema.validators import validator_for
+
+from ..exceptions import ValidationError
 
 
 class Schema(ABC):
@@ -99,6 +101,14 @@ class Schema(ABC):
         }
         output_schema.update(self.jsonschema_ref_schema)
         return output_schema
+
+    def validate(self, value: Any) -> None:
+        """
+        Determine whether a given object conforms to this schema, and throw an error if not.
+
+        :param value: An object to test for validity against this schema
+        """
+        jsonschema.validate(value, self.jsonschema_full_schema)
 
     def is_valid(self, value: Any) -> bool:
         """

@@ -14,7 +14,7 @@ class Vehicle(UserObject):
 
 class Address(UserObject):
     first_line: str = UserProperty(str)
-    second_line: str = UserProperty(str)
+    second_line: str = UserProperty(str, optional=True)
     city: str = UserProperty(str)
     postal_code: str = UserProperty(int)
 
@@ -22,6 +22,8 @@ class Address(UserObject):
 class Person(UserObject):
     first_name: str = UserProperty(str)
     last_name: str = UserProperty(str)
-    current_address: Address = UserProperty(Address)
+    current_address: Address = UserProperty(
+        Address,
+        default_function=lambda person: person.previous_addresses[0])
     previous_addresses: List[Address] = UserProperty(SchemaArray(Address))
-    vehicles: Dict[str, Vehicle] = UserProperty(SchemaDict(Vehicle))
+    vehicles: Dict[str, Vehicle] = UserProperty(SchemaDict(Vehicle), default={})

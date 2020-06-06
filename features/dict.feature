@@ -22,8 +22,8 @@ Feature: Test dictionary DOM objects
         }],
         "vehicles": {
           "eabf04": {
-          "color": "orange",
-          "description": "Station Wagon"
+            "color": "orange",
+            "description": "Station Wagon"
           }
         }
       }
@@ -38,9 +38,10 @@ Feature: Test dictionary DOM objects
             "properties": {
               "city": {"type": "string"},
               "first_line": {"type": "string"},
-              "postal_code": {"type": "integer"},
-              "second_line": {"type": "string"}
+              "second_line": {"type": "string"},
+              "postal_code": {"type": "integer"}
             },
+            "required": ["city", "first_line", "postal_code"],
             "additionalProperties": False
           },
           "dict_module.Vehicle": {
@@ -49,6 +50,7 @@ Feature: Test dictionary DOM objects
               "color": {"type": "string"},
               "description": {"type": "string"}
             },
+            "required": ["color", "description"],
             "additionalProperties": False
           },
           "dict_module.Person": {
@@ -58,16 +60,18 @@ Feature: Test dictionary DOM objects
               "last_name": {"type": "string"},
               "current_address": {"$ref": "#/definitions/dict_module.Address"},
               "previous_addresses": {
-              "array": {
-                "items": {"$ref": "#/definitions/dict_module.Address"}
-              }
+                "array": {
+                  "items": {"$ref": "#/definitions/dict_module.Address"}
+                }
               },
               "vehicles": {
                 "properties": {},
+                "required": [],
                 "additionalProperties": {"$ref": "#/definitions/dict_module.Vehicle"},
                 "type": "object"
               }
             },
+            "required": ["first_name", "last_name", "previous_addresses"],
             "additionalProperties": False
           }
         }
@@ -132,6 +136,54 @@ Feature: Test dictionary DOM objects
       | example.vehicles["eabf04"]    | example  | example.vehicles              | "eabf04"             |
       | "orange"                      | example  | example.vehicles["eabf04"]    | "color"              |
       | "Station Wagon"               | example  | example.vehicles["eabf04"]    | "description"        |
+
+  Scenario: Succeed if missing parameters are optional
+
+    Given the Python module dict_module.py
+    When we execute the following python code:
+      """
+      example_dict_input = {
+        "first_name": "Marge",
+        "last_name": "Simpson",
+        "previous_addresses": [{
+          "first_line": "742 Evergreen Terrace",
+          "city": "Springfield",
+          "postal_code": 58008
+        }]
+      }
+      example = dict_module.Person(example_dict_input)
+      """
+    Then the following statements are true:
+      """
+      schema(example).is_valid(example_dict_input)
+      example.current_address.second_line is None
+      example.previous_addresses[0].second_line is None
+      example.current_address.first_line == "742 Evergreen Terrace"
+      len(example.vehicles) == 0
+      """
+
+  Scenario: Fail if missing parameters are non-optional
+
+    Given the Python module dict_module.py
+    When we execute the following python code:
+      """
+      example_dict_input = {
+        "first_name": "Marge",
+        "previous_addresses": [{
+          "first_line": "742 Evergreen Terrace",
+          "city": "Springfield",
+          "postal_code": 58008
+        }]
+      }
+      """
+    Then the following statements are true:
+      """
+      not(schema(example).is_valid(example_dict_input))
+      """
+    And the following statement raises ValidationError
+      """
+      dict_module.Person(example_dict_input)
+      """
 
   Scenario: Test bad input string
 

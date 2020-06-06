@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Iterator, Dict
+from typing import Any, Optional, Iterator, Dict
 
 from collections.abc import Mapping, MutableMapping
 
@@ -10,7 +10,7 @@ from ..base_schema import SchemaAnything
 from .DOMElement import DOMElement
 from . import DOMInfo
 from .DOMProperties import DOMProperties
-from .functions import document
+from .functions import document, schema
 
 
 class DOMObject(DOMElement, MutableMapping):
@@ -19,7 +19,7 @@ class DOMObject(DOMElement, MutableMapping):
     """
 
     __json_schema_properties__: DOMProperties = None
-    __json_element_data__: Dict[str, DOMElement] = None
+    __json_element_data__: Dict[str, Optional[DOMElement]] = None
 
     def __init__(
             self,
@@ -36,6 +36,7 @@ class DOMObject(DOMElement, MutableMapping):
             raise ValidationError(
                 f"Cannot validate input. Object is not a mapping: {value}"
             )
+        schema(self).validate(value)
         super().__init__(None, json_dom_info)
         self.__json_element_data__ = {}
         try:
@@ -44,27 +45,34 @@ class DOMObject(DOMElement, MutableMapping):
         except KeyError as e:
             raise ValidationError(str(e))
 
-    def __getitem__(self, key: str) -> DOMElement:
+    def __getitem__(self, key: str) -> Optional[DOMElement]:
         return self.__json_element_data__[key]
 
-    def __setitem__(self, key: str, value: DOMElement) -> None:
-        item_class = self.__json_schema_properties__.properties.get(
-            key, self.__json_schema_properties__.additional_properties)
-        if item_class is True:
-            item_class = SchemaAnything()
-        if not item_class:
-            raise KeyError(
-                f"No property named '{key}' exists, and "
-                "additional properties are not allowed."
+    def __setitem__(self, key: str, value: Optional[DOMElement]) -> None:
+        if value is None:
+            if key in self.__json_schema_properties__.required:
+                raise ValueError(
+                    f"The property '{key}' is not optional and cannot be None."
+                )
+            self.__json_element_data__[key] = None
+        else:
+            item_class = self.__json_schema_properties__.properties.get(
+                key, self.__json_schema_properties__.additional_properties)
+            if item_class is True:
+                item_class = SchemaAnything()
+            if not item_class:
+                raise KeyError(
+                    f"No property named '{key}' exists, and "
+                    "additional properties are not allowed."
+                )
+            self.__json_element_data__[key] = item_class(
+                value,
+                DOMInfo(
+                    document=document(self),
+                    parent=self,
+                    element_key=key
+                )
             )
-        self.__json_element_data__[key] = item_class(
-            value,
-            DOMInfo(
-                document=document(self),
-                parent=self,
-                element_key=key
-            )
-        )
 
     def __delitem__(self, key: str) -> None:
         del self.__json_element_data__[key]

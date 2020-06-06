@@ -37,13 +37,16 @@ class UserProperties(DOMProperties):
         """
         self._user_class = user_class
         properties = {}
+        required = set()
         for superclass in reversed(list(self._schema_superclasses())):
             for k, v in superclass.__dict__.items():
                 if isinstance(v, UserProperty):
                     if not v.name:
                         v.name = k
                     properties[v.name] = v.schema_type
-        super().__init__(properties, additional_properties)
+                    if not v.optional:
+                        required.add(v.name)
+        super().__init__(properties, required, additional_properties)
 
     def _schema_superclasses(self) -> Iterator[Type[UserObject]]:
         for superclass in inspect.getmro(self._user_class):
@@ -119,6 +122,7 @@ class UserObject(DOMObject):
         else:
             return SchemaObject(
                 properties=cls.__json_schema_properties__.properties,
+                required=cls.__json_schema_properties__.required,
                 additional_properties=cls.__json_schema_properties__.additional_properties,
                 object_type=cls,
                 schema_ref_name=f"{cls.__module__}.{cls.__name__}"
