@@ -9,10 +9,10 @@ Feature: Test dictionary DOM objects
         "first_name": "Marge",
         "last_name": "Simpson",
         "current_address": {
-        "first_line": "123 Fake Street",
-        "second_line": "",
-        "city": "Springfield",
-        "postal_code": 58008
+          "first_line": "123 Fake Street",
+          "second_line": "",
+          "city": "Springfield",
+          "postal_code": 58008
         },
         "previous_addresses": [{
           "first_line": "742 Evergreen Terrace",
@@ -199,4 +199,32 @@ Feature: Test dictionary DOM objects
     And the following statement raises ValidationError
       """
       dict_module.Person(example_dict_input)
+      """
+
+  Scenario: Defaults should not be written as permanent values when accessed
+
+    Given the Python module dict_module.py
+    When we execute the following python code:
+      """
+      example_dict_input = {
+        "first_name": "Marge",
+        "last_name": "Simpson",
+        "previous_addresses": [{
+          "first_line": "742 Evergreen Terrace",
+          "city": "Springfield",
+          "postal_code": 58008
+        }]
+      }
+      example = dict_module.Person(example_dict_input)
+      original_address = example.current_address
+      example.previous_addresses[0] = {
+        "first_line": "123 Fake Street",
+        "city": "Springfield",
+        "postal_code": 58008
+      }
+      """
+    Then the following statements are true:
+      """
+      example.current_address.first_line == "123 Fake Street"
+      example.previous_addresses[0].first_line == "123 Fake Street"
       """
