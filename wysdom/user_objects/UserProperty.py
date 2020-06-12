@@ -72,9 +72,9 @@ class UserProperty(object):
                 "UserProperty is not valid as a class data descriptor")
         if self.name not in instance:
             if self.default_function:
-                instance[self.name] = self.default_function(instance)
+                return self.default_function(instance)
             else:
-                instance[self.name] = self.default
+                return self.default
         return instance[self.name]
 
     def __set__(
