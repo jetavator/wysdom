@@ -227,4 +227,7 @@ Feature: Test dictionary DOM objects
       """
       example.current_address.first_line == "123 Fake Street"
       example.previous_addresses[0].first_line == "123 Fake Street"
+      type(example.vehicles) is wysdom.dom.DOMDict
+      document(example.vehicles) is example
+      example.vehicles is example.vehicles
       """

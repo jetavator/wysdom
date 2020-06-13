@@ -26,4 +26,4 @@ class Person(UserObject):
         Address,
         default_function=lambda person: person.previous_addresses[0])
     previous_addresses: List[Address] = UserProperty(SchemaArray(Address))
-    vehicles: Dict[str, Vehicle] = UserProperty(SchemaDict(Vehicle), default={})
+    vehicles: Dict[str, Vehicle] = UserProperty(SchemaDict(Vehicle), default={}, persist_defaults=True)
