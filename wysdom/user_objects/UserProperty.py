@@ -2,7 +2,7 @@ from typing import Type, Any, Union, Optional, Callable
 
 from ..base_schema import Schema
 from ..object_schema import resolve_arg_to_schema
-from ..dom import DOMObject
+from ..dom import DOMObject, DOMInfo, document
 
 
 class UserProperty(object):
@@ -38,6 +38,13 @@ class UserProperty(object):
                              passed the :class:`~.wysdom.user_objects.UserObject` instance that
                              owns the property. Cannot be set in conjunction
                              with `default`.
+
+    :param persist_defaults: If this property is set to True and a UserProperty has either the
+                             `default` or `default_function` property, when the UserProperty returns
+                             a default value that value will also be explicitly stored in the underlying
+                             data object. This is often desirable behavior if the UserProperty
+                             returns another object and your code expects it to return the same
+                             object instance each time it is accessed.
     """
 
     def __init__(
@@ -46,7 +53,8 @@ class UserProperty(object):
             optional: Optional[bool] = None,
             name: Optional[str] = None,
             default: Optional[Any] = None,
-            default_function: Optional[Callable] = None
+            default_function: Optional[Callable] = None,
+            persist_defaults: Optional[bool] = None
     ) -> None:
         if default is not None or default_function is not None:
             if default is not None and default_function is not None:
@@ -61,6 +69,7 @@ class UserProperty(object):
         self.name = name
         self.default = default
         self.default_function = default_function
+        self.persist_defaults = persist_defaults
 
     def __get__(
             self,
@@ -72,9 +81,23 @@ class UserProperty(object):
                 "UserProperty is not valid as a class data descriptor")
         if self.name not in instance:
             if self.default_function:
-                return self.default_function(instance)
+                default_value = self.default_function(instance)
             else:
-                return self.default
+                default_value = self.default
+            if self.persist_defaults:
+                instance[self.name] = default_value
+                return instance[self.name]
+            elif default_value is None:
+                return default_value
+            else:
+                return self.schema_type(
+                    default_value,
+                    DOMInfo(
+                        document=document(instance),
+                        parent=instance,
+                        element_key=self.name
+                    )
+                )
         return instance[self.name]
 
     def __set__(

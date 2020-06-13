@@ -1,5 +1,6 @@
 from behave import *
 
+import wysdom
 from wysdom import document, parent, key, schema
 
 import os
