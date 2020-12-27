@@ -113,7 +113,8 @@ class UserObject(DOMObject):
             return SchemaAnyOf(
                 (
                     subclass.__json_schema__()
-                    for subclass in cls.registered_subclasses().values()
+                    for subclass_list in cls.registered_subclasses().values()
+                    for subclass in subclass_list
                     if issubclass(subclass, UserObject)
                     and not isinstance(subclass.__json_schema__(), SchemaAnyOf)
                 ),
