@@ -35,8 +35,6 @@ class RegistersSubclasses(ABC):
             cls.__registered_subclasses__[name].append(cls)
         cls.registered_name = name
 
-        print((cls, cls.__registered_subclasses__), flush=True)
-
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
