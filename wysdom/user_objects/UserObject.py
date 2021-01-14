@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Type, Iterator, Union, Mapping
+from typing import Any, Type, Iterator, Union, Mapping, List
 
 import inspect
 
@@ -57,6 +57,40 @@ class UserProperties(DOMProperties):
                 yield superclass
 
 
+class SchemaAnyRegisteredSubclass(SchemaAnyOf):
+    """
+    A SchemaAnyOf that allows any registered subclass of a UserObject.
+    Exists so that allowed_schemas can be populated dynamically and is not fixed
+    based on the object's current subclasses, but will also include any
+    future subclasses that are defined after this object's creation.
+
+    :param object_type:   The UserObject subclass.
+    """
+
+    def __init__(
+            self,
+            object_type: Type[UserObject]
+    ):
+        super().__init__(
+            allowed_schemas=[],
+            schema_ref_name=f"{object_type.__module__}.{object_type.__name__}"
+        )
+        self.object_type = object_type
+
+    @property
+    def allowed_schemas(self) -> List[Schema]:
+        if issubclass(self.object_type, RegistersSubclasses):
+            return [
+                subclass.__json_schema__()
+                for subclass_list in self.object_type.registered_subclasses().values()
+                for subclass in subclass_list
+                if issubclass(subclass, UserObject)
+                and not isinstance(subclass.__json_schema__(), SchemaAnyOf)
+            ]
+        else:
+            return []
+
+
 class UserObject(DOMObject):
     """
     Base class for user-defined DOM objects.
@@ -110,16 +144,7 @@ class UserObject(DOMObject):
             if cls.registered_subclasses():
                 has_subclasses = True
         if has_subclasses:
-            return SchemaAnyOf(
-                (
-                    subclass.__json_schema__()
-                    for subclass_list in cls.registered_subclasses().values()
-                    for subclass in subclass_list
-                    if issubclass(subclass, UserObject)
-                    and not isinstance(subclass.__json_schema__(), SchemaAnyOf)
-                ),
-                schema_ref_name=f"{cls.__module__}.{cls.__name__}"
-            )
+            return SchemaAnyRegisteredSubclass(cls)
         else:
             return SchemaObject(
                 properties=cls.__json_schema_properties__.properties,
@@ -128,3 +153,5 @@ class UserObject(DOMObject):
                 object_type=cls,
                 schema_ref_name=f"{cls.__module__}.{cls.__name__}"
             )
+
+

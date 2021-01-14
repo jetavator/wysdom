@@ -23,7 +23,8 @@ class SchemaAnyOf(Schema):
             allowed_schemas: Iterable[Schema],
             schema_ref_name: Optional[str] = None
     ) -> None:
-        self.allowed_schemas = tuple(allowed_schemas)
+        if allowed_schemas:
+            self.allowed_schemas = tuple(allowed_schemas)
         self.schema_ref_name = schema_ref_name
 
     def __call__(
