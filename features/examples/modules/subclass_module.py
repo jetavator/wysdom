@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import List
 
 from abc import ABC, abstractmethod
 
@@ -28,14 +28,14 @@ class Greyhound(Dog):
         return f"{self.name}, the greyhound, says Woof!"
 
 
+class Person(UserObject):
+    first_name: str = UserProperty(str)
+    last_name: str = UserProperty(str)
+    pets: List[Pet] = UserProperty(SchemaArray(Pet))
+
+
 class Cat(Pet):
     pet_type: str = UserProperty(SchemaConst("cat"))
 
     def speak(self):
         return f"{self.name} says Miaow!"
-
-
-class Person(UserObject):
-    first_name: str = UserProperty(str)
-    last_name: str = UserProperty(str)
-    pets: List[Pet] = UserProperty(SchemaArray(Pet))
