@@ -75,20 +75,18 @@ class SchemaAnyRegisteredSubclass(SchemaAnyOf):
             allowed_schemas=[],
             schema_ref_name=f"{object_type.__module__}.{object_type.__name__}"
         )
+        assert issubclass(object_type, RegistersSubclasses)
         self.object_type = object_type
 
     @property
     def allowed_schemas(self) -> List[Schema]:
-        if issubclass(self.object_type, RegistersSubclasses):
-            return [
-                subclass.__json_schema__()
-                for subclass_list in self.object_type.registered_subclasses().values()
-                for subclass in subclass_list
-                if issubclass(subclass, UserObject)
-                and not isinstance(subclass.__json_schema__(), SchemaAnyOf)
-            ]
-        else:
-            return []
+        return [
+            subclass.__json_schema__()
+            for subclass_list in self.object_type.registered_subclasses().values()
+            for subclass in subclass_list
+            if issubclass(subclass, UserObject)
+            and not isinstance(subclass.__json_schema__(), SchemaAnyOf)
+        ]
 
 
 class UserObject(DOMObject):
