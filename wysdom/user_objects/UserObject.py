@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import Any, Type, Iterator, Union, Mapping, List
+from typing import Any, Optional, Type, Iterator, Union, Mapping, Dict
 
 import inspect
 
-from ..mixins import RegistersSubclasses
+from ..mixins import RegistersSubclasses, has_registered_subclasses
 from ..base_schema import Schema
 from ..object_schema import SchemaObject, SchemaAnyOf
 from ..dom import (
@@ -57,12 +57,16 @@ class UserProperties(DOMProperties):
                 yield superclass
 
 
-class SchemaAnyRegisteredSubclass(SchemaAnyOf):
+class UserObjectSchema(Schema):
     """
-    A SchemaAnyOf that allows any registered subclass of a UserObject.
-    Exists so that allowed_schemas can be populated dynamically and is not fixed
-    based on the object's current subclasses, but will also include any
-    future subclasses that are defined after this object's creation.
+    A Schema for a given UserObject, which may behave like a SchemaAnyOf if
+    the UserObject has registered subclasses, or a SchemaObject if it
+    does not.
+
+    The exact behavior (determined by UserObjectSchema.inner_schema) is
+    determined dynamically to ensure that the schema will include any
+    future registered subclasses that are defined after the UserObject's
+    creation.
 
     :param object_type:   The UserObject subclass.
     """
@@ -71,22 +75,49 @@ class SchemaAnyRegisteredSubclass(SchemaAnyOf):
             self,
             object_type: Type[UserObject]
     ):
-        super().__init__(
-            allowed_schemas=[],
-            schema_ref_name=f"{object_type.__module__}.{object_type.__name__}"
-        )
-        assert issubclass(object_type, RegistersSubclasses)
         self.object_type = object_type
 
     @property
-    def allowed_schemas(self) -> List[Schema]:
-        return [
-            subclass.__json_schema__()
-            for subclass_list in self.object_type.registered_subclasses().values()
-            for subclass in subclass_list
-            if issubclass(subclass, UserObject)
-            and not isinstance(subclass.__json_schema__(), SchemaAnyOf)
-        ]
+    def inner_schema(self) -> Schema:
+        if has_registered_subclasses(self.object_type):
+            assert issubclass(self.object_type, RegistersSubclasses)
+            return SchemaAnyOf(
+                allowed_schemas=[
+                    subclass.__json_schema__()
+                    for subclass_list in self.object_type.registered_subclasses().values()
+                    for subclass in subclass_list
+                    if issubclass(subclass, UserObject)
+                    and not has_registered_subclasses(subclass)
+                ],
+                schema_ref_name=f"{self.object_type.__module__}.{self.object_type.__name__}"
+            )
+        else:
+            return SchemaObject(
+                properties=self.object_type.__json_schema_properties__.properties,
+                required=self.object_type.__json_schema_properties__.required,
+                additional_properties=self.object_type.__json_schema_properties__.additional_properties,
+                object_type=self.object_type,
+                schema_ref_name=f"{self.object_type.__module__}.{self.object_type.__name__}"
+            )
+
+    def __call__(
+            self,
+            value: Any,
+            dom_info: DOMInfo = None
+    ) -> Any:
+        return self.inner_schema.__call__(value, dom_info)
+
+    @property
+    def referenced_schemas(self) -> Dict[str, Schema]:
+        return self.inner_schema.referenced_schemas
+
+    @property
+    def jsonschema_definition(self) -> Dict[str, Any]:
+        return self.inner_schema.jsonschema_definition
+
+    @property
+    def schema_ref_name(self) -> Optional[str]:
+        return self.inner_schema.schema_ref_name
 
 
 class UserObject(DOMObject):
@@ -137,19 +168,6 @@ class UserObject(DOMObject):
 
     @classmethod
     def __json_schema__(cls) -> Schema:
-        has_subclasses = False
-        if issubclass(cls, RegistersSubclasses):
-            if cls.registered_subclasses():
-                has_subclasses = True
-        if has_subclasses:
-            return SchemaAnyRegisteredSubclass(cls)
-        else:
-            return SchemaObject(
-                properties=cls.__json_schema_properties__.properties,
-                required=cls.__json_schema_properties__.required,
-                additional_properties=cls.__json_schema_properties__.additional_properties,
-                object_type=cls,
-                schema_ref_name=f"{cls.__module__}.{cls.__name__}"
-            )
+        return UserObjectSchema(cls)
 
 
