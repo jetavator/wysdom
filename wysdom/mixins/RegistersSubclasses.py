@@ -125,3 +125,15 @@ class RegistersSubclasses(ABC):
 
 
 RegisteredSubclassList = List[Type[RegistersSubclasses]]
+
+
+def has_registered_subclasses(cls: type) -> bool:
+    """
+    Tests whether any class is a subclass of RegistersSubclasses and whether
+    it has any registered subclasses. If either is false, returns false.
+    """
+    has_subclasses = False
+    if issubclass(cls, RegistersSubclasses):
+        if cls.registered_subclasses():
+            has_subclasses = True
+    return has_subclasses

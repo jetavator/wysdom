@@ -1,8 +1,8 @@
 Feature: Test subclassed DOM objects
 
-  Scenario: Test good input string
+  Scenario Outline: Test good input string
 
-    Given the Python module subclass_module.py
+    Given the Python module <module>.py
     When we execute the following python code:
       """
       example_dict_input = {
@@ -19,12 +19,12 @@ Feature: Test subclassed DOM objects
           }
         ]
       }
-      example = subclass_module.Person(example_dict_input)
+      example = <module>.Person(example_dict_input)
       expected_schema = {
         "$schema": "http://json-schema.org/draft-07/schema#",
-        "$ref": "#/definitions/subclass_module.Person",
+        "$ref": "#/definitions/<module>.Person",
         "definitions": {
-          "subclass_module.Greyhound": {
+          "<module>.Greyhound": {
             "type": "object",
             "properties": {
               "pet_type": {"const": "greyhound"},
@@ -33,7 +33,7 @@ Feature: Test subclassed DOM objects
             "required": ["name", "pet_type"],
             "additionalProperties": False
           },
-          "subclass_module.Cat": {
+          "<module>.Cat": {
             "type": "object",
             "properties": {
               "pet_type": {"const": "cat"},
@@ -42,20 +42,20 @@ Feature: Test subclassed DOM objects
             "required": ["name", "pet_type"],
             "additionalProperties": False
           },
-          "subclass_module.Pet": {
+          "<module>.Pet": {
             "anyOf": [
-              {"$ref": "#/definitions/subclass_module.Greyhound"},
-              {"$ref": "#/definitions/subclass_module.Cat"}
+              {"$ref": "#/definitions/<module>.Greyhound"},
+              {"$ref": "#/definitions/<module>.Cat"}
             ]
           },
-          "subclass_module.Person": {
+          "<module>.Person": {
             "type": "object",
             "properties": {
               "first_name": {"type": "string"},
               "last_name": {"type": "string"},
               "pets": {
                 "array": {
-                  "items": {"$ref": "#/definitions/subclass_module.Pet"}
+                  "items": {"$ref": "#/definitions/<module>.Pet"}
                 }
               }
             },
@@ -81,3 +81,9 @@ Feature: Test subclassed DOM objects
       copy.copy(example).to_builtin() == example_dict_input
       copy.deepcopy(example).to_builtin() == example_dict_input
       """
+
+    Examples:
+      | module               |
+      | subclass_module      |
+      | late_subclass_module |
+

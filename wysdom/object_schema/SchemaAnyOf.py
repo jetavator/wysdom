@@ -15,7 +15,7 @@ class SchemaAnyOf(Schema):
                             is referred to by other schemas.
     """
 
-    _allowed_schemas: Tuple[Schema] = None
+    allowed_schemas: Tuple[Schema] = None
     schema_ref_name: Optional[str] = None
 
     def __init__(
@@ -23,7 +23,7 @@ class SchemaAnyOf(Schema):
             allowed_schemas: Iterable[Schema],
             schema_ref_name: Optional[str] = None
     ) -> None:
-        self._allowed_schemas = tuple(allowed_schemas)
+        self.allowed_schemas = tuple(allowed_schemas)
         self.schema_ref_name = schema_ref_name
 
     def __call__(
@@ -46,10 +46,6 @@ class SchemaAnyOf(Schema):
                 f"No valid schema was found for the supplied value: {value}"
             )
         return valid_schemas[0](value, dom_info)
-
-    @property
-    def allowed_schemas(self) -> Tuple[Schema]:
-        return self._allowed_schemas
 
     @property
     def referenced_schemas(self) -> Dict[str, Schema]:
