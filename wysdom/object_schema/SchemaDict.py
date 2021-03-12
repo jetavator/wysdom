@@ -27,7 +27,7 @@ class SchemaDict(SchemaObject):
     ) -> None:
         super().__init__(
             additional_properties=resolve_arg_to_schema(items),
-            property_names=SchemaPattern(key_pattern)
+            property_names=(None if key_pattern is None else SchemaPattern(key_pattern))
         )
 
     def __call__(
