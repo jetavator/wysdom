@@ -19,7 +19,7 @@ class Vehicle(UserObject):
 
 
 class Address(UserObject):
-    first_line: str = UserProperty(str)
+    first_line: str = UserProperty(str, pattern=r"^(\d)+.*$")
     second_line: str = UserProperty(str, optional=True)
     city: str = UserProperty(str)
     postal_code: str = UserProperty(int)
@@ -32,4 +32,7 @@ class Person(UserObject):
         Address,
         default_function=lambda person: person.previous_addresses[0])
     previous_addresses: List[Address] = UserProperty(SchemaArray(Address))
-    vehicles: Dict[str, Vehicle] = UserProperty(SchemaDict(Vehicle), default={}, persist_defaults=True)
+    vehicles: Dict[str, Vehicle] = UserProperty(
+        SchemaDict(Vehicle),
+        default={},
+        persist_defaults=True)

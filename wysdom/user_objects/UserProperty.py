@@ -1,6 +1,6 @@
 from typing import Type, Any, Union, Optional, Callable
 
-from ..base_schema import Schema
+from ..base_schema import Schema, SchemaPattern
 from ..object_schema import resolve_arg_to_schema
 from ..dom import DOMObject, DOMInfo, document
 
@@ -45,6 +45,9 @@ class UserProperty(object):
                              data object. This is often desirable behavior if the UserProperty
                              returns another object and your code expects it to return the same
                              object instance each time it is accessed.
+
+    :param pattern:          A regex pattern to validate the values of this property against.
+                             Use only for `str` properties.
     """
 
     def __init__(
@@ -54,7 +57,8 @@ class UserProperty(object):
             name: Optional[str] = None,
             default: Optional[Any] = None,
             default_function: Optional[Callable] = None,
-            persist_defaults: Optional[bool] = None
+            persist_defaults: Optional[bool] = None,
+            pattern: Optional[str] = None
     ) -> None:
         if default is not None or default_function is not None:
             if default is not None and default_function is not None:
@@ -65,7 +69,12 @@ class UserProperty(object):
             self.optional = True
         else:
             self.optional = bool(optional)
-        self.schema_type = resolve_arg_to_schema(property_type)
+        if pattern:
+            if property_type is not str:
+                raise TypeError("Parameter 'pattern' can only be set if 'property_type' is str.")
+            self.schema_type = SchemaPattern(pattern)
+        else:
+            self.schema_type = resolve_arg_to_schema(property_type)
         self.name = name
         self.default = default
         self.default_function = default_function
