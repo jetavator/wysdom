@@ -234,6 +234,12 @@ for code readability.
 .. autofunction:: wysdom.schema
 
 
+Other convenience functions
+---------------------------
+
+.. autofunction:: wysdom.properties
+
+
 Mixins
 ======
 
