@@ -45,17 +45,17 @@ def step_impl(context, exception_type):
 
     def remove_whitespace(text):
         return " ".join(
-            line.strip()
-            for line in context.text.splitlines()
+            line.strip('"')
+            for line in text.splitlines()
         ).strip()
 
-    if remove_whitespace(context.text) != remove_whitespace(context.exception):
+    if remove_whitespace(context.text) != remove_whitespace(str(context.exception)):
         raise Exception(
             f"""
             Expected error message:
-            {context.text}
+            {remove_whitespace(context.text)}
             Got:
-            {context.exception}
+            {remove_whitespace(str(context.exception))}
             """
         )
 

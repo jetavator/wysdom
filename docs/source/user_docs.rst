@@ -153,6 +153,24 @@ When this object is translated to a JSON Schema, the `enum` keyword will be used
 to define the permitted values of the property.
 
 
+Patterns
+--------
+
+If you need to restrict the values that a UserProperty
+can take according to a regex pattern, you can specify this
+using the `pattern` parameter::
+
+    class Vehicle(UserObject):
+        rgb_hex_color = UserProperty(str, pattern=r"^[0-9a-f]{6}$")
+
+
+Note that this will throw a `TypeError` if any type other than `str` is
+supplied.
+
+When the object is translated to a JSON Schema, the `pattern` keyword will be used
+to validate the permitted values of the property.
+
+
 Arrays and Dicts
 ----------------
 
@@ -177,6 +195,26 @@ specification that you supply.
 
 For both SchemaArray and SchemaDict you may pass in any type definition that
 you would pass to a UserProperty.
+
+
+Dict Key Validation via Regex
+-----------------------------
+
+If your dictionary only has certain keys that are valid for your application
+according to a regex pattern, you can specify this with the parameter
+`key_pattern`::
+
+    color_names = UserProperty(
+        SchemaDict(ColorName),
+        key_pattern=r"^[0-9a-f]{6}$"
+    )
+
+
+This will translate to the following in the object's JSON Schema definition::
+
+    "propertyNames": {
+        "pattern": "^[0-9a-f]{6}$"
+    }
 
 
 DOM functions

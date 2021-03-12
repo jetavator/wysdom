@@ -37,7 +37,7 @@ Feature: Test dictionary DOM objects
             "type": "object",
             "properties": {
               "city": {"type": "string"},
-              "first_line": {"type": "string"},
+              "first_line": {"type": "string", "pattern": r"^(\d)+.*$"},
               "second_line": {"type": "string"},
               "postal_code": {"type": "integer"}
             },
@@ -68,6 +68,10 @@ Feature: Test dictionary DOM objects
                 "properties": {},
                 "required": [],
                 "additionalProperties": {"$ref": "#/definitions/dict_module.Vehicle"},
+                "propertyNames": {
+                  "type": "string",
+                  "pattern": r"^[a-f0-9]{6}$"
+                },
                 "type": "object"
               }
             },
@@ -111,8 +115,8 @@ Feature: Test dictionary DOM objects
       parent(example["vehicles"]["eabf04"]) is example.vehicles
       document(example["vehicles"]["eabf04"]) is example
       key(example["vehicles"]["eabf04"]) == "eabf04"
-      schema(example).is_valid(example_dict_input)
-      schema(example).jsonschema_full_schema == expected_schema
+      schema(dict_module.Person).is_valid(example_dict_input)
+      schema(dict_module.Person).jsonschema_full_schema == expected_schema
       example_dict_output == example_dict_input
       copy.copy(example).to_builtin() == example_dict_input
       copy.deepcopy(example).to_builtin() == example_dict_input
@@ -156,7 +160,7 @@ Feature: Test dictionary DOM objects
       """
     Then the following statements are true:
       """
-      schema(example).is_valid(example_dict_input)
+      schema(dict_module.Person).is_valid(example_dict_input)
       example.current_address.second_line is None
       example.previous_addresses[0].second_line is None
       example.current_address.first_line == "742 Evergreen Terrace"
@@ -179,7 +183,7 @@ Feature: Test dictionary DOM objects
       """
     Then the following statements are true:
       """
-      not(schema(example).is_valid(example_dict_input))
+      not(schema(dict_module.Person).is_valid(example_dict_input))
       """
     And the following statement raises ValidationError
       """
@@ -195,7 +199,7 @@ Feature: Test dictionary DOM objects
       """
     Then the following statements are true:
       """
-      not(schema(example).is_valid(example_dict_input))
+      not(schema(dict_module.Person).is_valid(example_dict_input))
       """
     And the following statement raises ValidationError
       """
@@ -231,4 +235,65 @@ Feature: Test dictionary DOM objects
       type(example.vehicles) is wysdom.dom.DOMDict
       document(example.vehicles) is example
       example.vehicles is example.vehicles
+      """
+
+  Scenario: Test invalid value for property pattern
+
+    Given the Python module dict_module.py
+    When we execute the following python code:
+      """
+      example_dict_input = {
+          "first_line": "Bad Address",
+          "city": "Springfield",
+          "postal_code": 58008
+      }
+      """
+    Then the following statements are true:
+      """
+      not(schema(dict_module.Address).is_valid(example_dict_input))
+      """
+    And the following statement raises ValidationError
+      """
+      dict_module.Address(example_dict_input)
+      """
+
+  Scenario: Test invalid value for dictionary key pattern
+
+    Given the Python module dict_module.py
+    When we execute the following python code:
+      """
+      example_dict_input = {
+        "first_name": "Marge",
+        "last_name": "Simpson",
+        "current_address": {
+          "first_line": "123 Fake Street",
+          "second_line": "",
+          "city": "Springfield",
+          "postal_code": 58008
+        },
+        "previous_addresses": [],
+        "vehicles": {
+          "badkey": {
+            "color": "orange",
+            "description": "Station Wagon"
+          }
+        }
+      }
+      """
+    Then the following statements are true:
+      """
+      not(schema(dict_module.Person).is_valid(example_dict_input))
+      """
+    And the following statement raises ValidationError
+      """
+      dict_module.Person(example_dict_input)
+      """
+
+
+  Scenario: Fail if pattern is supplied and property_type is not str
+
+    When we try to load the Python module invalid_pattern_not_str.py
+    Then a TypeError is raised with text:
+      """
+      Parameter 'pattern' can only be set if 'property_type' is str.
       """
