@@ -290,3 +290,10 @@ Feature: Test dictionary DOM objects
       """
 
 
+  Scenario: Fail if pattern is supplied and property_type is not str
+
+    When we try to load the Python module invalid_pattern_not_str.py
+    Then a TypeError is raised with text:
+      """
+      Parameter 'pattern' can only be set if 'property_type' is str.
+      """
