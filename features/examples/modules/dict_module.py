@@ -1,7 +1,7 @@
 from typing import Dict, List
 from enum import Enum
 
-from wysdom import UserObject, UserProperty, SchemaArray, SchemaDict, key
+from wysdom import UserObject, UserProperty, ListProperty, DictProperty, key
 
 
 class Color(Enum):
@@ -31,8 +31,9 @@ class Person(UserObject):
     current_address: Address = UserProperty(
         Address,
         default_function=lambda person: person.previous_addresses[0])
-    previous_addresses: List[Address] = UserProperty(SchemaArray(Address))
-    vehicles: Dict[str, Vehicle] = UserProperty(
-        SchemaDict(Vehicle, key_pattern=r"^[a-f0-9]{6}$"),
+    previous_addresses: List[Address] = ListProperty(Address)
+    vehicles: Dict[str, Vehicle] = DictProperty(
+        Vehicle,
+        key_pattern=r"^[a-f0-9]{6}$",
         default={},
         persist_defaults=True)

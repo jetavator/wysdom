@@ -4,6 +4,6 @@ from .dom import document, parent, key, schema
 from . import dom
 from .base_schema import Schema, SchemaType, SchemaNone, SchemaPrimitive, SchemaAnything, SchemaConst
 from .object_schema import SchemaArray, SchemaDict, SchemaAnyOf, SchemaObject
-from .user_objects import UserProperty, UserObject, properties
+from .user_objects import UserObject, UserProperty, ListProperty, DictProperty, properties
 from .mixins import ReadsJSON, ReadsYAML, RegistersSubclasses
 
