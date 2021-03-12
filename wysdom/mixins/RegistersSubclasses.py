@@ -99,10 +99,8 @@ class RegistersSubclasses(ABC):
                     ):
                         return matched_subclass
             raise KeyError(
-                f"""
-                The key '{name}' is ambiguous as it matches multiple proper subclasses of {cls}:
-                {matched_subclasses}
-                """)
+                f"The key '{name}' is ambiguous as it matches multiple proper subclasses of {cls}: "
+                f"{matched_subclasses}")
         return matched_subclasses[0]
 
     @classmethod
