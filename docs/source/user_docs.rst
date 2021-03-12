@@ -42,7 +42,7 @@ of :class:`~wysdom.UserProperty`, or an instance of :class:`~wysdom.Schema`::
     class Person(UserObject, additional_properties=Address):
         ...
 
-    class Person(UserObject, additional_properties=SchemaDict[Vehicle]):
+    class Person(UserObject, additional_properties=SchemaDict(Vehicle)):
         ...
 
 
@@ -183,11 +183,25 @@ function identically to a Python list (specifically a
 
     related_people = UserProperty(SchemaArray(Person))
 
+
+From 0.3.0, you can use the data descriptor :class:`wysdom.ListProperty`
+to aid readability by equivalently writing::
+
+    related_people = ListProperty(Person)
+
+
 For an dictionary, use the :class:`wysdom.SchemaDict`. Properties of this type
 function identically to a Python dict (specifically a
 :class:`collections.abc.MutableMapping` with keys of type :class:`str`)::
 
     related_people = UserProperty(SchemaDict(Person))
+
+
+From 0.3.0, you can use the data descriptor :class:`wysdom.DictProperty`
+to aid readability by equivalently writing::
+
+    related_people = DictProperty(Person)
+
 
 A `SchemaDict` is a special case of a :class:`wysdom.SchemaObject` with
 no named properties and with additional_properties set to the type

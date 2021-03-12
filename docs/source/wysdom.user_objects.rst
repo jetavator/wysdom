@@ -24,3 +24,19 @@ UserProperty
    :members:
    :undoc-members:
    :show-inheritance:
+
+ListProperty
+----------------------------------------
+
+.. autoclass:: wysdom.ListProperty
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+DictProperty
+----------------------------------------
+
+.. autoclass:: wysdom.DictProperty
+   :members:
+   :undoc-members:
+   :show-inheritance:
