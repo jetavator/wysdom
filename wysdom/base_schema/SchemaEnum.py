@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple, Type
 from enum import Enum
 
 from .Schema import Schema
@@ -9,11 +9,11 @@ class SchemaEnum(Schema):
     A schema requiring a one of a set of enumerated values.
     """
 
-    enum: Enum = None
+    enum: Type[Enum] = None
 
     def __init__(
             self,
-            enum: Enum
+            enum: Type[Enum]
     ) -> None:
         self.enum = enum
 
