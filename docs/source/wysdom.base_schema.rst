@@ -25,10 +25,26 @@ SchemaConst
    :undoc-members:
    :show-inheritance:
 
+SchemaEnum
+-------------------------------------
+
+.. autoclass:: wysdom.SchemaEnum
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 SchemaNone
 -------------------------------------
 
 .. autoclass:: wysdom.SchemaNone
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+SchemaPattern
+------------------------------------------
+
+.. autoclass:: wysdom.SchemaPattern
    :members:
    :undoc-members:
    :show-inheritance:
