@@ -124,6 +124,35 @@ In this case, use the :class:`wysdom.SchemaConst` class::
     pet_type = UserProperty(SchemaConst("cat"))
 
 
+Enums
+-----
+
+Sometimes a property should have one of a set of strictly enumerated values.
+For this use case it is possible to use a Python `Enum` as the property type
+of a given :class:`~wysdom.UserProperty`::
+
+    from enum import Enum
+
+
+    class Color(Enum):
+        PINK = "pink"
+        ORANGE = "orange"
+
+
+    class Vehicle(UserObject):
+        color = UserProperty(Color)
+
+
+    >>> my_vehicle = Vehicle({"color": "orange"})
+    >>> my_vehicle.color
+
+    <Color.ORANGE: 'orange'>
+
+
+When this object is translated to a JSON Schema, the `enum` keyword will be used
+to define the permitted values of the property.
+
+
 Arrays and Dicts
 ----------------
 
