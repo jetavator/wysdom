@@ -21,13 +21,19 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'jsonschema>=3.2.0,<4',
-    'pyyaml>=5.3.1,<6'
+    'jsonschema>=3.2,<4',
+    'pyyaml>=5.3,<6'
 ]
 
 # What packages are optional?
 EXTRAS = {
-    # 'some-feature': ['requirement'],
+    'dev': [
+        'coverage>=5.5,<6',
+        'wheel>=0.36.2,<0.37',
+        'sphinx>=3.5,<4',
+        'sphinx_rtd_theme>=0.5.1,<0.6',
+        'behave>=1.2.6,<2'
+    ],
 }
 
 # Package setup
