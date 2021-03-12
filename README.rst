@@ -23,6 +23,15 @@ In your system console, run::
     pip install wysdom
 
 
+Development Environment
+-----------------------
+
+To install a development environment with dependencies for docs and testing,
+clone this repo to your local system and run::
+
+    pip install -e .[dev]
+
+
 Documentation
 =============
 
@@ -106,6 +115,7 @@ User class definition::
         previous_addresses = UserProperty(SchemaArray(Address))
         vehicles = UserProperty(SchemaDict(Vehicle))
 
+
 Loading from dict::
 
     person_instance = Person({
@@ -131,6 +141,7 @@ Loading from dict::
       }
     })
 
+
 Reading attributes::
 
     >>> person_instance.last_name
@@ -147,3 +158,4 @@ Reading attributes::
 
     >>> person_instance.vehicles["eabf04"].license
     'eabf04'
+

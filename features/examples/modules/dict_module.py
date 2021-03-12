@@ -1,10 +1,16 @@
 from typing import Dict, List
+from enum import Enum
 
 from wysdom import UserObject, UserProperty, SchemaArray, SchemaDict, key
 
 
+class Color(Enum):
+    PINK = "pink"
+    ORANGE = "orange"
+
+
 class Vehicle(UserObject):
-    color: str = UserProperty(str)
+    color: Color = UserProperty(Color)
     description: str = UserProperty(str)
 
     @property

@@ -4,4 +4,6 @@ from .SchemaType import SchemaType
 from .SchemaPrimitive import SchemaPrimitive
 from .SchemaNone import SchemaNone
 from .SchemaConst import SchemaConst
+from .SchemaEnum import SchemaEnum
+
 

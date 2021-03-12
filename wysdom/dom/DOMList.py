@@ -112,14 +112,7 @@ class DOMList(DOMElement, MutableSequence, Generic[T_co]):
 
         :return: A Python list containing this object's data
         """
-        return [
-            (
-                v.to_builtin()
-                if isinstance(v, DOMElement)
-                else v
-            )
-            for v in self
-        ]
+        return list(map(self._value_to_builtin, self))
 
     def walk_elements(self) -> Iterator[DOMInfo]:
         yield self.__json_dom_info__

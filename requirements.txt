@@ -1,7 +1,1 @@
--e .
-
-coverage
-wheel
-sphinx
-sphinx_rtd_theme
-behave
+-e .[dev]

@@ -47,7 +47,7 @@ Feature: Test dictionary DOM objects
           "dict_module.Vehicle": {
             "type": "object",
             "properties": {
-              "color": {"type": "string"},
+              "color": {"enum": ["pink", "orange"]},
               "description": {"type": "string"}
             },
             "required": ["color", "description"],
@@ -94,7 +94,8 @@ Feature: Test dictionary DOM objects
       example.previous_addresses[0].second_line == ""
       example.previous_addresses[0].city == "Springfield"
       example.previous_addresses[0].postal_code == 58008
-      example.vehicles["eabf04"].color == "orange"
+      isinstance(example.vehicles["eabf04"].color, dict_module.Color)
+      example.vehicles["eabf04"].color is dict_module.Color.ORANGE
       example.vehicles["eabf04"].description == "Station Wagon"
       example.vehicles["eabf04"].license == "eabf04"
       len(example) == 5
@@ -134,7 +135,7 @@ Feature: Test dictionary DOM objects
       | 58008                         | example  | example.previous_addresses[0] | "postal_code"        |
       | example.vehicles              | example  | example                       | "vehicles"           |
       | example.vehicles["eabf04"]    | example  | example.vehicles              | "eabf04"             |
-      | "orange"                      | example  | example.vehicles["eabf04"]    | "color"              |
+      | dict_module.Color.ORANGE      | example  | example.vehicles["eabf04"]    | "color"              |
       | "Station Wagon"               | example  | example.vehicles["eabf04"]    | "description"        |
 
   Scenario: Succeed if missing parameters are optional
