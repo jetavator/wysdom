@@ -33,6 +33,6 @@ class Person(UserObject):
         default_function=lambda person: person.previous_addresses[0])
     previous_addresses: List[Address] = UserProperty(SchemaArray(Address))
     vehicles: Dict[str, Vehicle] = UserProperty(
-        SchemaDict(Vehicle),
+        SchemaDict(Vehicle, key_pattern=r"^[a-f0-9]{6}$"),
         default={},
         persist_defaults=True)

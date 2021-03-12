@@ -19,6 +19,7 @@ class SchemaObject(SchemaType):
                                   from this schema.
     :param schema_ref_name:       An optional unique reference name to use when this schema
                                   is referred to by other schemas.
+    :param property_names:        An optional Schema that property names must be validated against.
     """
 
     type_name: str = "object"
@@ -26,6 +27,7 @@ class SchemaObject(SchemaType):
     required: Set[str] = None
     additional_properties: Union[bool, Schema] = False
     schema_ref_name: Optional[str] = None
+    property_names: Optional[Schema] = None
 
     def __init__(
             self,
@@ -33,13 +35,15 @@ class SchemaObject(SchemaType):
             required: Set[str] = None,
             additional_properties: Union[bool, Schema] = False,
             object_type: Type = dict,
-            schema_ref_name: Optional[str] = None
+            schema_ref_name: Optional[str] = None,
+            property_names: Optional[Schema] = None
     ) -> None:
         self.properties = properties or {}
         self.required = required or set()
         self.additional_properties = additional_properties
         self.object_type = object_type
         self.schema_ref_name = schema_ref_name
+        self.property_names = property_names
 
     def __call__(
             self,
@@ -72,6 +76,11 @@ class SchemaObject(SchemaType):
                 self.additional_properties.jsonschema_ref_schema
                 if isinstance(self.additional_properties, Schema)
                 else self.additional_properties
+            ),
+            **(
+                {"propertyNames": self.property_names.jsonschema_ref_schema}
+                if self.property_names is not None
+                else {}
             )
         }
 

@@ -68,6 +68,10 @@ Feature: Test dictionary DOM objects
                 "properties": {},
                 "required": [],
                 "additionalProperties": {"$ref": "#/definitions/dict_module.Vehicle"},
+                "propertyNames": {
+                  "type": "string",
+                  "pattern": r"^[a-f0-9]{6}$"
+                },
                 "type": "object"
               }
             },
@@ -252,3 +256,37 @@ Feature: Test dictionary DOM objects
       """
       dict_module.Address(example_dict_input)
       """
+
+  Scenario: Test invalid value for dictionary key pattern
+
+    Given the Python module dict_module.py
+    When we execute the following python code:
+      """
+      example_dict_input = {
+        "first_name": "Marge",
+        "last_name": "Simpson",
+        "current_address": {
+          "first_line": "123 Fake Street",
+          "second_line": "",
+          "city": "Springfield",
+          "postal_code": 58008
+        },
+        "previous_addresses": [],
+        "vehicles": {
+          "badkey": {
+            "color": "orange",
+            "description": "Station Wagon"
+          }
+        }
+      }
+      """
+    Then the following statements are true:
+      """
+      not(schema(dict_module.Person).is_valid(example_dict_input))
+      """
+    And the following statement raises ValidationError
+      """
+      dict_module.Person(example_dict_input)
+      """
+
+
