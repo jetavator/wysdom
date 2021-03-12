@@ -104,11 +104,7 @@ class DOMObject(DOMElement, MutableMapping):
         :return: A Python dict containing this object's data
         """
         return {
-            k: (
-                v.to_builtin()
-                if isinstance(v, DOMElement)
-                else v
-            )
+            k: self._value_to_builtin(v)
             for k, v in self.items()
         }
 

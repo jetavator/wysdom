@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from typing import Type, Union
+from enum import Enum
 
 import inspect
 
 from ..base_schema import Schema
 from ..dom import DOMElement
 
-from ..base_schema import SchemaPrimitive
+from ..base_schema import SchemaPrimitive, SchemaEnum
 
 
 def resolve_arg_to_schema(
@@ -25,6 +26,8 @@ def resolve_arg_to_schema(
     if inspect.isclass(arg):
         if issubclass(arg, DOMElement):
             return arg.__json_schema__()
+        if issubclass(arg, Enum):
+            return SchemaEnum(arg)
         else:
             return SchemaPrimitive(arg)
     elif isinstance(arg, Schema):

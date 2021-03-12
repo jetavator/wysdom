@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from typing import Any, Iterator, NamedTuple, Optional
+from enum import Enum
 
 from abc import ABC, abstractmethod
 
 from ..base_schema import Schema, SchemaAnything
 
 
+# noinspection PyUnresolvedReferences
 class DOMInfo(NamedTuple):
     """
     Named tuple containing information about a DOM element's position within the DOM.
@@ -84,3 +86,16 @@ class DOMElement(ABC):
         :return: An iterator of :class:`~wysdom.dom.DOMInfo` tuples.
         """
         yield self.__json_dom_info__
+
+    @staticmethod
+    def _value_to_builtin(value: Any) -> Any:
+        """
+        Returns the contents of any DOMElement Python builtin. Return type
+        varies depending on the specific object type.
+        """
+        if isinstance(value, DOMElement):
+            return value.to_builtin()
+        elif isinstance(value, Enum):
+            return value.value
+        else:
+            return value
