@@ -16,18 +16,13 @@ class SchemaPattern(SchemaPrimitive):
         super().__init__(python_type=str)
         self.pattern = pattern
 
-    def __call__(
-            self,
-            value: str,
-            dom_info: Tuple = None
-    ) -> Any:
+    def __call__(self, value: str, dom_info: Tuple = None) -> Any:
         if not re.match(self.pattern, value):
-            raise ValueError(f"Parameter value {value} does not match regex pattern {self.pattern}.")
+            raise ValueError(
+                f"Parameter value {value} does not match regex pattern {self.pattern}."
+            )
         return super().__call__(value)
 
     @property
     def jsonschema_definition(self) -> Dict[str, Any]:
-        return {
-            "type": self.type_name,
-            "pattern": self.pattern
-        }
+        return {"type": self.type_name, "pattern": self.pattern}

@@ -11,9 +11,7 @@ from ..dom import DOMElement
 from ..base_schema import SchemaPrimitive, SchemaEnum
 
 
-def resolve_arg_to_schema(
-        arg: Union[Type, Schema]
-) -> Schema:
+def resolve_arg_to_schema(arg: Union[Type, Schema]) -> Schema:
     """
     Resolve an argument of heterogeneous type to a `Schema` instance.
 

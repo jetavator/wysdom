@@ -48,13 +48,13 @@ class ListProperty(UserProperty):
     """
 
     def __init__(
-            self,
-            items: Union[Type, Schema],
-            optional: Optional[bool] = None,
-            name: Optional[str] = None,
-            default: Optional[Any] = None,
-            default_function: Optional[Callable] = None,
-            persist_defaults: Optional[bool] = None
+        self,
+        items: Union[Type, Schema],
+        optional: Optional[bool] = None,
+        name: Optional[str] = None,
+        default: Optional[Any] = None,
+        default_function: Optional[Callable] = None,
+        persist_defaults: Optional[bool] = None,
     ) -> None:
         super().__init__(
             property_type=SchemaArray(items),
@@ -62,5 +62,5 @@ class ListProperty(UserProperty):
             name=name,
             default=default,
             default_function=default_function,
-            persist_defaults=persist_defaults
+            persist_defaults=persist_defaults,
         )

@@ -23,5 +23,3 @@ class SchemaType(Schema, ABC):
     @property
     def jsonschema_definition(self) -> Dict[str, Any]:
         return {"type": self.type_name}
-
-

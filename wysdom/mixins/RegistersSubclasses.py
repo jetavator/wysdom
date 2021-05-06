@@ -16,19 +16,21 @@ class RegistersSubclasses(ABC):
     __registered_subclasses__: Optional[Dict[str, RegisteredSubclassList]] = None
 
     def __init_subclass__(
-        cls,
-        register_as: Optional[str] = None,
-        **kwargs: Any
+        cls, register_as: Optional[str] = None, **kwargs: Any
     ) -> None:
         super().__init_subclass__(**kwargs)
 
-        if cls.__registered_subclasses__ is None and RegistersSubclasses in cls.__bases__:
+        if (
+            cls.__registered_subclasses__ is None
+            and RegistersSubclasses in cls.__bases__
+        ):
             cls.__registered_subclasses__ = {}
 
         name = register_as or f"{cls.__module__}.{cls.__name__}"
         if not isinstance(name, str):
             raise TypeError(
-                f"Parameter register_as must be a string, not {type(register_as)}")
+                f"Parameter register_as must be a string, not {type(register_as)}"
+            )
 
         cls.__registered_subclasses__.setdefault(name, [])
         if cls not in cls.__registered_subclasses__[name]:
@@ -64,15 +66,12 @@ class RegistersSubclasses(ABC):
         return [
             subclass
             for subclass in cls.__registered_subclasses__.get(name, [])
-            if issubclass(subclass, cls)
-            and subclass is not cls
+            if issubclass(subclass, cls) and subclass is not cls
         ]
 
     @classmethod
     def registered_subclass(
-            cls,
-            name: str,
-            return_common_superclass: bool = True
+        cls, name: str, return_common_superclass: bool = True
     ) -> Type[RegistersSubclasses]:
         """
         Return a registered subclass by name.
@@ -88,27 +87,24 @@ class RegistersSubclasses(ABC):
         """
         matched_subclasses = cls.registered_subclasses_by_name(name)
         if len(matched_subclasses) == 0:
-            raise KeyError(
-                f"The key '{name}' matches no proper subclasses of {cls}.")
+            raise KeyError(f"The key '{name}' matches no proper subclasses of {cls}.")
         elif len(matched_subclasses) > 1:
             if return_common_superclass:
                 for matched_subclass in matched_subclasses:
                     if all(
-                            issubclass(other_subclass, matched_subclass)
-                            for other_subclass in matched_subclasses
+                        issubclass(other_subclass, matched_subclass)
+                        for other_subclass in matched_subclasses
                     ):
                         return matched_subclass
             raise KeyError(
                 f"The key '{name}' is ambiguous as it matches multiple proper subclasses of {cls}: "
-                f"{matched_subclasses}")
+                f"{matched_subclasses}"
+            )
         return matched_subclasses[0]
 
     @classmethod
     def registered_subclass_instance(
-        cls,
-        name: str,
-        *args: Any,
-        **kwargs: Any
+        cls, name: str, *args: Any, **kwargs: Any
     ) -> RegistersSubclasses:
         """
         Create a new instance of a registered subclass by name.

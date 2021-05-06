@@ -19,19 +19,14 @@ class ReadsJSON(DOMObject):
         return json.JSONEncoder().encode(self.to_builtin())
 
     @classmethod
-    def from_json(
-            cls,
-            json_string: str
-    ) -> ReadsJSON:
+    def from_json(cls, json_string: str) -> ReadsJSON:
         """
         Create a new DOM object by from a JSON string.
 
         :param json_string: JSON string to read
         :return:            New DOM object instance
         """
-        return cls(
-            json.JSONDecoder().decode(json_string)
-        )
+        return cls(json.JSONDecoder().decode(json_string))
 
     @classmethod
     def from_json_file(cls, filename: str) -> ReadsJSON:

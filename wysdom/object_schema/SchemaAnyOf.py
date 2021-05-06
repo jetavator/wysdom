@@ -19,18 +19,12 @@ class SchemaAnyOf(Schema):
     schema_ref_name: Optional[str] = None
 
     def __init__(
-            self,
-            allowed_schemas: Iterable[Schema],
-            schema_ref_name: Optional[str] = None
+        self, allowed_schemas: Iterable[Schema], schema_ref_name: Optional[str] = None
     ) -> None:
         self.allowed_schemas = tuple(allowed_schemas)
         self.schema_ref_name = schema_ref_name
 
-    def __call__(
-            self,
-            value: Any,
-            dom_info: DOMInfo = None
-    ) -> Any:
+    def __call__(self, value: Any, dom_info: DOMInfo = None) -> Any:
         valid_schemas = [
             allowed_schema
             for allowed_schema in self.allowed_schemas
@@ -59,7 +53,7 @@ class SchemaAnyOf(Schema):
     @property
     def jsonschema_definition(self) -> Dict[str, Any]:
         return {
-            'anyOf': [
+            "anyOf": [
                 allowed_schema.jsonschema_ref_schema
                 for allowed_schema in self.allowed_schemas
             ]
