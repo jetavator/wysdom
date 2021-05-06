@@ -6,7 +6,6 @@ from enum import Enum
 from abc import ABC, abstractmethod
 
 from ..base_schema import Schema, SchemaAnything
-from ..repr import inspect_based_repr
 
 
 # noinspection PyUnresolvedReferences
@@ -60,9 +59,6 @@ class DOMElement(ABC):
             )
         else:
             self.__json_dom_info__ = DOMInfo(element=self, document=self)
-
-    def __repr__(self):
-        return inspect_based_repr(self)
 
     @classmethod
     def __json_schema__(cls) -> Schema:
