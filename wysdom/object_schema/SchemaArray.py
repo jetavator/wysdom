@@ -19,22 +19,11 @@ class SchemaArray(Schema):
 
     items: Schema = None
 
-    def __init__(
-            self,
-            items: Union[Type, Schema]
-    ) -> None:
+    def __init__(self, items: Union[Type, Schema]) -> None:
         self.items = resolve_arg_to_schema(items)
 
-    def __call__(
-            self,
-            value: Iterable,
-            dom_info: DOMInfo = None
-    ) -> Any:
-        return DOMList(
-            value,
-            dom_info,
-            item_type=self.items
-        )
+    def __call__(self, value: Iterable, dom_info: DOMInfo = None) -> Any:
+        return DOMList(value, dom_info, item_type=self.items)
 
     @property
     def referenced_schemas(self) -> Dict[str, Schema]:
@@ -42,8 +31,4 @@ class SchemaArray(Schema):
 
     @property
     def jsonschema_definition(self) -> Dict[str, Any]:
-        return {
-            "array": {
-                "items": self.items.jsonschema_ref_schema
-            }
-        }
+        return {"array": {"items": self.items.jsonschema_ref_schema}}

@@ -22,9 +22,7 @@ class DOMObject(DOMElement, MutableMapping):
     __json_element_data__: Dict[str, Optional[DOMElement]] = None
 
     def __init__(
-            self,
-            value: Mapping[str, Any] = None,
-            json_dom_info: DOMInfo = None
+        self, value: Mapping[str, Any] = None, json_dom_info: DOMInfo = None
     ) -> None:
         """
         :param value:         A dict (or any :class:`collections.abc.Mapping`) containing the data to populate this
@@ -57,7 +55,8 @@ class DOMObject(DOMElement, MutableMapping):
             self.__json_element_data__[key] = None
         else:
             item_class = self.__json_schema_properties__.properties.get(
-                key, self.__json_schema_properties__.additional_properties)
+                key, self.__json_schema_properties__.additional_properties
+            )
             if item_class is True:
                 item_class = SchemaAnything()
             if not item_class:
@@ -66,12 +65,7 @@ class DOMObject(DOMElement, MutableMapping):
                     "additional properties are not allowed."
                 )
             self.__json_element_data__[key] = item_class(
-                value,
-                DOMInfo(
-                    document=document(self),
-                    parent=self,
-                    element_key=key
-                )
+                value, DOMInfo(document=document(self), parent=self, element_key=key)
             )
 
     def __delitem__(self, key: str) -> None:
@@ -103,10 +97,7 @@ class DOMObject(DOMElement, MutableMapping):
 
         :return: A Python dict containing this object's data
         """
-        return {
-            k: self._value_to_builtin(v)
-            for k, v in self.items()
-        }
+        return {k: self._value_to_builtin(v) for k, v in self.items()}
 
     def __copy__(self) -> DOMObject:
         cls = self.__class__
@@ -117,9 +108,6 @@ class DOMObject(DOMElement, MutableMapping):
 
     def __deepcopy__(self, memo: Dict[int, DOMElement]) -> DOMObject:
         cls = self.__class__
-        result = cls(
-            value=self.to_builtin(),
-            json_dom_info=self.__json_dom_info__
-        )
+        result = cls(value=self.to_builtin(), json_dom_info=self.__json_dom_info__)
         memo[id(self)] = result
         return result

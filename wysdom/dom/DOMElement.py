@@ -36,10 +36,7 @@ class DOMElement(ABC):
 
     @abstractmethod
     def __init__(
-            self,
-            value: Any = None,
-            json_dom_info: DOMInfo = None,
-            **kwargs: Any
+        self, value: Any = None, json_dom_info: DOMInfo = None, **kwargs: Any
     ) -> None:
         """
         :param value:         A data structure containing the data to populate this element.
@@ -55,15 +52,13 @@ class DOMElement(ABC):
             self.__json_dom_info__ = DOMInfo(
                 element=self,
                 document=(
-                    self if json_dom_info.document is None
-                    else json_dom_info.document
+                    self if json_dom_info.document is None else json_dom_info.document
                 ),
                 parent=json_dom_info.parent,
-                element_key=json_dom_info.element_key
+                element_key=json_dom_info.element_key,
             )
         else:
-            self.__json_dom_info__ = DOMInfo(
-                element=self, document=self)
+            self.__json_dom_info__ = DOMInfo(element=self, document=self)
 
     @classmethod
     def __json_schema__(cls) -> Schema:

@@ -11,25 +11,18 @@ class SchemaPrimitive(SchemaType):
     """
 
     JSON_TYPES: Dict[Type, str] = {
-        str: 'string',
-        bool: 'boolean',
-        int: 'integer',
-        float: 'number'
+        str: "string",
+        bool: "boolean",
+        int: "integer",
+        float: "number",
     }
 
     python_type: Type = None
 
-    def __init__(
-            self,
-            python_type: Optional[Type] = None
-    ) -> None:
+    def __init__(self, python_type: Optional[Type] = None) -> None:
         self.python_type = python_type
 
-    def __call__(
-            self,
-            value: Any,
-            dom_info: Tuple = None
-    ) -> Any:
+    def __call__(self, value: Any, dom_info: Tuple = None) -> Any:
         return super().__call__(self.python_type(value))
 
     @property

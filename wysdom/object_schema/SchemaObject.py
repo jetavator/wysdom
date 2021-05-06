@@ -30,13 +30,13 @@ class SchemaObject(SchemaType):
     property_names: Optional[Schema] = None
 
     def __init__(
-            self,
-            properties: Optional[Dict[str, Schema]] = None,
-            required: Set[str] = None,
-            additional_properties: Union[bool, Schema] = False,
-            object_type: Type = dict,
-            schema_ref_name: Optional[str] = None,
-            property_names: Optional[Schema] = None
+        self,
+        properties: Optional[Dict[str, Schema]] = None,
+        required: Set[str] = None,
+        additional_properties: Union[bool, Schema] = False,
+        object_type: Type = dict,
+        schema_ref_name: Optional[str] = None,
+        property_names: Optional[Schema] = None,
     ) -> None:
         self.properties = properties or {}
         self.required = required or set()
@@ -45,11 +45,7 @@ class SchemaObject(SchemaType):
         self.schema_ref_name = schema_ref_name
         self.property_names = property_names
 
-    def __call__(
-            self,
-            value: Any,
-            dom_info: DOMInfo = None
-    ) -> Any:
+    def __call__(self, value: Any, dom_info: DOMInfo = None) -> Any:
         return self.object_type(value, dom_info)
 
     @property
@@ -68,8 +64,7 @@ class SchemaObject(SchemaType):
         return {
             **super().jsonschema_definition,
             "properties": {
-                k: v.jsonschema_ref_schema
-                for k, v in self.properties.items()
+                k: v.jsonschema_ref_schema for k, v in self.properties.items()
             },
             "required": list(sorted(self.required)),
             "additionalProperties": (
@@ -81,7 +76,5 @@ class SchemaObject(SchemaType):
                 {"propertyNames": self.property_names.jsonschema_ref_schema}
                 if self.property_names is not None
                 else {}
-            )
+            ),
         }
-
-

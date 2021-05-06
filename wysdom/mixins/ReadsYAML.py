@@ -23,10 +23,7 @@ class ReadsYAML(DOMObject):
         return yaml.safe_dump(self.to_builtin(), **kwargs)
 
     @classmethod
-    def from_yaml(
-            cls,
-            yaml_string: Union[str, TextIO]
-    ) -> ReadsYAML:
+    def from_yaml(cls, yaml_string: Union[str, TextIO]) -> ReadsYAML:
         """
         Create a new DOM object by from a YAML string.
 
@@ -45,4 +42,3 @@ class ReadsYAML(DOMObject):
         """
         with open(filename, "r") as stream:
             return cls.from_yaml(stream)
-

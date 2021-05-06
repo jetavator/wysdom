@@ -5,6 +5,7 @@ from ..base_schema import Schema
 
 # TODO: DRY with object_schema.SchemaObject?
 
+
 class DOMProperties(object):
     """
     A container for property information for a :class:`.DOMObject`.
@@ -15,10 +16,10 @@ class DOMProperties(object):
     additional_properties: Union[bool, Schema] = False
 
     def __init__(
-            self,
-            properties: Dict[str, Schema] = None,
-            required: Set[str] = None,
-            additional_properties: Union[bool, Schema] = False
+        self,
+        properties: Dict[str, Schema] = None,
+        required: Set[str] = None,
+        additional_properties: Union[bool, Schema] = False,
     ) -> None:
         """
         :param properties:            A dictionary of :class:`~wysdom.base_schema.Schema` objects

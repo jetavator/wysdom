@@ -13,11 +13,7 @@ import copy
 @given("the Python module {module}.py")
 def load_python_module(context, module):
     spec = importlib.util.spec_from_file_location(
-        module,
-        os.path.join(
-            context.config.paths[0],
-            f"examples/modules/{module}.py"
-        )
+        module, os.path.join(context.config.paths[0], f"examples/modules/{module}.py")
     )
     loaded_module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(loaded_module)
@@ -39,15 +35,12 @@ def step_impl(context, exception_type):
         raise Exception("No exception was raised.")
     if exception_type != context.exception.__class__.__name__:
         raise Exception(
-            f"Expected exception type {exception_type}, got {type(context.exception)}: " +
-            str(context.exception)
+            f"Expected exception type {exception_type}, got {type(context.exception)}: "
+            + str(context.exception)
         )
 
     def remove_whitespace(text):
-        return " ".join(
-            line.strip('"')
-            for line in text.splitlines()
-        ).strip()
+        return " ".join(line.strip('"') for line in text.splitlines()).strip()
 
     if remove_whitespace(context.text) != remove_whitespace(str(context.exception)):
         raise Exception(
@@ -60,7 +53,7 @@ def step_impl(context, exception_type):
         )
 
 
-@given(u"the following string, {variable_name}")
+@given("the following string, {variable_name}")
 def step_impl(context, variable_name):
     globals()[variable_name] = context.text
 
@@ -115,7 +108,7 @@ def step_impl(context, variable_name):
             matches(y.element, eval(x["element"]))
             and matches(y.document, eval(x["document"]))
             and matches(y.parent, eval(x["parent"]))
-            and matches(y.element_key,  eval(x["element_key"]))
+            and matches(y.element_key, eval(x["element_key"]))
             for y in tuple_list
         ):
             raise Exception(f"Could not find {x}")

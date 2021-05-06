@@ -50,14 +50,14 @@ class DictProperty(UserProperty):
     """
 
     def __init__(
-            self,
-            items: Union[Type, Schema],
-            optional: Optional[bool] = None,
-            name: Optional[str] = None,
-            default: Optional[Any] = None,
-            default_function: Optional[Callable] = None,
-            persist_defaults: Optional[bool] = None,
-            key_pattern: Optional[str] = None
+        self,
+        items: Union[Type, Schema],
+        optional: Optional[bool] = None,
+        name: Optional[str] = None,
+        default: Optional[Any] = None,
+        default_function: Optional[Callable] = None,
+        persist_defaults: Optional[bool] = None,
+        key_pattern: Optional[str] = None,
     ) -> None:
         super().__init__(
             property_type=SchemaDict(items, key_pattern=key_pattern),
@@ -65,5 +65,5 @@ class DictProperty(UserProperty):
             name=name,
             default=default,
             default_function=default_function,
-            persist_defaults=persist_defaults
+            persist_defaults=persist_defaults,
         )

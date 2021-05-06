@@ -51,27 +51,30 @@ class UserProperty(object):
     """
 
     def __init__(
-            self,
-            property_type: Union[Type, Schema],
-            optional: Optional[bool] = None,
-            name: Optional[str] = None,
-            default: Optional[Any] = None,
-            default_function: Optional[Callable] = None,
-            persist_defaults: Optional[bool] = None,
-            pattern: Optional[str] = None
+        self,
+        property_type: Union[Type, Schema],
+        optional: Optional[bool] = None,
+        name: Optional[str] = None,
+        default: Optional[Any] = None,
+        default_function: Optional[Callable] = None,
+        persist_defaults: Optional[bool] = None,
+        pattern: Optional[str] = None,
     ) -> None:
         if default is not None or default_function is not None:
             if default is not None and default_function is not None:
                 raise ValueError("Cannot use both default and default_function.")
             if optional is False:
                 raise ValueError(
-                    "Cannot set optional to False if default or default_function are specified.")
+                    "Cannot set optional to False if default or default_function are specified."
+                )
             self.optional = True
         else:
             self.optional = bool(optional)
         if pattern:
             if property_type is not str:
-                raise TypeError("Parameter 'pattern' can only be set if 'property_type' is str.")
+                raise TypeError(
+                    "Parameter 'pattern' can only be set if 'property_type' is str."
+                )
             self.schema_type = SchemaPattern(pattern)
         else:
             self.schema_type = resolve_arg_to_schema(property_type)
@@ -80,14 +83,9 @@ class UserProperty(object):
         self.default_function = default_function
         self.persist_defaults = persist_defaults
 
-    def __get__(
-            self,
-            instance: DOMObject,
-            owner: Type[DOMObject]
-    ) -> Any:
+    def __get__(self, instance: DOMObject, owner: Type[DOMObject]) -> Any:
         if instance is None:
-            raise AttributeError(
-                "UserProperty is not valid as a class data descriptor")
+            raise AttributeError("UserProperty is not valid as a class data descriptor")
         if self.name not in instance:
             if self.default_function:
                 default_value = self.default_function(instance)
@@ -104,14 +102,10 @@ class UserProperty(object):
                     DOMInfo(
                         document=document(instance),
                         parent=instance,
-                        element_key=self.name
-                    )
+                        element_key=self.name,
+                    ),
                 )
         return instance[self.name]
 
-    def __set__(
-            self,
-            instance: DOMObject,
-            value: Any
-    ) -> None:
+    def __set__(self, instance: DOMObject, value: Any) -> None:
         instance[self.name] = value

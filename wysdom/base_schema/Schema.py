@@ -7,6 +7,7 @@ import jsonschema
 from jsonschema.validators import validator_for
 
 from ..exceptions import ValidationError
+from ..repr import inspect_based_repr
 
 
 class Schema(ABC):
@@ -19,11 +20,10 @@ class Schema(ABC):
     primitive Python object containing the data that is supplied to them.
     """
 
-    def __call__(
-            self,
-            value: Any,
-            dom_info: Tuple = None
-    ) -> Any:
+    def __repr__(self):
+        return inspect_based_repr(self)
+
+    def __call__(self, value: Any, dom_info: Tuple = None) -> Any:
         """
         Return either a DOM object or primitive Python object containing the data
         supplied in `value`, if `value` is a valid instance of this schema.
@@ -95,9 +95,8 @@ class Schema(ABC):
         output_schema = {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "definitions": {
-                k: v.jsonschema_definition
-                for k, v in self.referenced_schemas.items()
-            }
+                k: v.jsonschema_definition for k, v in self.referenced_schemas.items()
+            },
         }
         output_schema.update(self.jsonschema_ref_schema)
         return output_schema
@@ -117,4 +116,6 @@ class Schema(ABC):
         :param value: An object to test for validity against this schema
         :return:      True if the object is valid, otherwise False
         """
-        return validator_for(self.jsonschema_full_schema)(self.jsonschema_full_schema).is_valid(value)
+        return validator_for(self.jsonschema_full_schema)(
+            self.jsonschema_full_schema
+        ).is_valid(value)

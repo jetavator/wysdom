@@ -21,22 +21,14 @@ class SchemaDict(SchemaObject):
     """
 
     def __init__(
-            self,
-            items: Union[Type, Schema],
-            key_pattern: Optional[str] = None
+        self, items: Union[Type, Schema], key_pattern: Optional[str] = None
     ) -> None:
         super().__init__(
             additional_properties=resolve_arg_to_schema(items),
-            property_names=(None if key_pattern is None else SchemaPattern(key_pattern))
+            property_names=(
+                None if key_pattern is None else SchemaPattern(key_pattern)
+            ),
         )
 
-    def __call__(
-            self,
-            value: Any,
-            dom_info: DOMInfo = None
-    ) -> Any:
-        return DOMDict(
-            value,
-            dom_info,
-            item_type=self.additional_properties
-        )
+    def __call__(self, value: Any, dom_info: DOMInfo = None) -> Any:
+        return DOMDict(value, dom_info, item_type=self.additional_properties)

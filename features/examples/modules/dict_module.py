@@ -29,11 +29,9 @@ class Person(UserObject):
     first_name: str = UserProperty(str)
     last_name: str = UserProperty(str)
     current_address: Address = UserProperty(
-        Address,
-        default_function=lambda person: person.previous_addresses[0])
+        Address, default_function=lambda person: person.previous_addresses[0]
+    )
     previous_addresses: List[Address] = ListProperty(Address)
     vehicles: Dict[str, Vehicle] = DictProperty(
-        Vehicle,
-        key_pattern=r"^[a-f0-9]{6}$",
-        default={},
-        persist_defaults=True)
+        Vehicle, key_pattern=r"^[a-f0-9]{6}$", default={}, persist_defaults=True
+    )

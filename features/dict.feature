@@ -121,6 +121,7 @@ Feature: Test dictionary DOM objects
       copy.copy(example).to_builtin() == example_dict_input
       copy.deepcopy(example).to_builtin() == example_dict_input
       set(properties(example).keys()) == {"first_name", "last_name", "current_address", "previous_addresses", "vehicles"}
+      repr(schema(dict_module.Person)) == "UserObjectSchema(object_type=<class 'dict_module.Person'>)"
       """
     And the list walk_elements contains the following tuples:
       | element                       | document | parent                        | element_key          |

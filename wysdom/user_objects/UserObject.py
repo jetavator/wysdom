@@ -7,11 +7,7 @@ import inspect
 from ..mixins import RegistersSubclasses, has_registered_subclasses
 from ..base_schema import Schema
 from ..object_schema import SchemaObject, SchemaAnyOf
-from ..dom import (
-    DOMObject,
-    DOMProperties,
-    DOMInfo
-)
+from ..dom import DOMObject, DOMProperties, DOMInfo
 
 from .UserProperty import UserProperty
 
@@ -22,9 +18,9 @@ class UserProperties(DOMProperties):
     """
 
     def __init__(
-            self,
-            user_class: Type[UserObject],
-            additional_properties: Union[bool, Schema] = False
+        self,
+        user_class: Type[UserObject],
+        additional_properties: Union[bool, Schema] = False,
     ):
         """
         :param user_class:            The subclass of :class:`.UserObject` to extract properties from.
@@ -50,10 +46,7 @@ class UserProperties(DOMProperties):
 
     def _schema_superclasses(self) -> Iterator[Type[UserObject]]:
         for superclass in inspect.getmro(self._user_class):
-            if (
-                    issubclass(superclass, UserObject)
-                    and superclass is not UserObject
-            ):
+            if issubclass(superclass, UserObject) and superclass is not UserObject:
                 yield superclass
 
 
@@ -71,10 +64,7 @@ class UserObjectSchema(Schema):
     :param object_type:   The UserObject subclass.
     """
 
-    def __init__(
-            self,
-            object_type: Type[UserObject]
-    ):
+    def __init__(self, object_type: Type[UserObject]):
         self.object_type = object_type
 
     @property
@@ -89,7 +79,7 @@ class UserObjectSchema(Schema):
                     if issubclass(subclass, UserObject)
                     and not has_registered_subclasses(subclass)
                 ],
-                schema_ref_name=f"{self.object_type.__module__}.{self.object_type.__name__}"
+                schema_ref_name=f"{self.object_type.__module__}.{self.object_type.__name__}",
             )
         else:
             return SchemaObject(
@@ -97,14 +87,10 @@ class UserObjectSchema(Schema):
                 required=self.object_type.__json_schema_properties__.required,
                 additional_properties=self.object_type.__json_schema_properties__.additional_properties,
                 object_type=self.object_type,
-                schema_ref_name=f"{self.object_type.__module__}.{self.object_type.__name__}"
+                schema_ref_name=f"{self.object_type.__module__}.{self.object_type.__name__}",
             )
 
-    def __call__(
-            self,
-            value: Any,
-            dom_info: DOMInfo = None
-    ) -> Any:
+    def __call__(self, value: Any, dom_info: DOMInfo = None) -> Any:
         return self.inner_schema.__call__(value, dom_info)
 
     @property
@@ -143,19 +129,19 @@ class UserObject(DOMObject):
     __json_schema_properties__: UserProperties = None
 
     def __init_subclass__(
-            cls,
-            *args: Any,
-            additional_properties: Union[bool, Schema] = False,
-            **kwargs: Any
+        cls,
+        *args: Any,
+        additional_properties: Union[bool, Schema] = False,
+        **kwargs: Any,
     ) -> None:
         cls.__json_schema_properties__ = UserProperties(cls)
         super().__init_subclass__(*args, **kwargs)
 
     def __init__(
-            self,
-            value: Mapping[str, Any] = None,
-            json_dom_info: DOMInfo = None,
-            **kwargs: Any
+        self,
+        value: Mapping[str, Any] = None,
+        json_dom_info: DOMInfo = None,
+        **kwargs: Any,
     ) -> None:
         if json_dom_info:
             if not isinstance(json_dom_info, DOMInfo):
@@ -169,5 +155,3 @@ class UserObject(DOMObject):
     @classmethod
     def __json_schema__(cls) -> Schema:
         return UserObjectSchema(cls)
-
-
