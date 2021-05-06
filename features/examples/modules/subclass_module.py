@@ -16,7 +16,6 @@ class Pet(UserObject, RegistersSubclasses, ABC):
 
 
 class Dog(Pet):
-
     def speak(self):
         return f"{self.name} says Woof!"
 

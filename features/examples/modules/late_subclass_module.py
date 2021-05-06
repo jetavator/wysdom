@@ -22,7 +22,6 @@ class Person(UserObject):
 
 
 class Dog(Pet):
-
     def speak(self):
         return f"{self.name} says Woof!"
 
