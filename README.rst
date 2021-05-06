@@ -1,7 +1,7 @@
 wysdom
 ######
 
-|Python application| |docs| |codecov|
+|Python application| |docs| |codecov| |Code style|
 
 .. |Python application| image:: https://github.com/jetavator/wysdom/workflows/Python%20application/badge.svg
    :target: https://github.com/jetavator/wysdom
