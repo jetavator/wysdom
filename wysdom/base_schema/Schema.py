@@ -7,6 +7,7 @@ import jsonschema
 from jsonschema.validators import validator_for
 
 from ..exceptions import ValidationError
+from ..repr import inspect_based_repr
 
 
 class Schema(ABC):
@@ -18,6 +19,9 @@ class Schema(ABC):
     Objects of type `Schema` are also callable, and when called will create DOM objects or
     primitive Python object containing the data that is supplied to them.
     """
+
+    def __repr__(self):
+        return inspect_based_repr(self)
 
     def __call__(
             self,

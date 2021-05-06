@@ -87,7 +87,7 @@ class UserObjectSchema(Schema):
                     for subclass_list in self.object_type.registered_subclasses().values()
                     for subclass in subclass_list
                     if issubclass(subclass, UserObject)
-                    and not has_registered_subclasses(subclass)
+                       and not has_registered_subclasses(subclass)
                 ],
                 schema_ref_name=f"{self.object_type.__module__}.{self.object_type.__name__}"
             )
@@ -169,5 +169,3 @@ class UserObject(DOMObject):
     @classmethod
     def __json_schema__(cls) -> Schema:
         return UserObjectSchema(cls)
-
-
