@@ -12,6 +12,9 @@ wysdom
 .. |codecov| image:: https://codecov.io/gh/jetavator/wysdom/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/jetavator/wysdom
 
+.. |Code style| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
+
 A Python library for building custom document object models (DOMs) with built-in JSON schema
 checking.
 
